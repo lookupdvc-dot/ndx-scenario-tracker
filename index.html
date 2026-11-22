@@ -59,7 +59,7 @@ canvas{display:block;width:100%}
 .scn dl{margin:0;font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
 .scn dt{color:var(--muted)}.scn dd{margin:0;font-weight:500;text-align:right}
 .scn p{font-size:13px;margin:10px 0 0;color:#44444a}
-.scn.base{outline:2px solid var(--maroon)}
+.scn{cursor:pointer;transition:outline-color .15s}.scn:hover{outline:1px solid var(--tan2)}.scn.sel,.scn.sel:hover{outline:2px solid var(--maroon)}
 .badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:var(--maroon);color:var(--ivory);margin-left:6px;vertical-align:2px}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
@@ -132,14 +132,14 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 
 <section id="scenarios">
 <div class="sec-h"><span class="n">02</span><h2>Four scenarios</h2></div>
-<p class="sub">Probability-weighted, the index ends the next 12 months roughly 5% below Friday's close, with a further 15–20% drop likely along the way.</p>
+<p class="sub">Probability-weighted, the index ends the next 12 months roughly 5% below Friday's close, with a further 15–20% drop likely along the way. Click a scenario to see its roadmap.</p>
 <div class="grid4" id="scn"></div>
 <div class="grid2" style="margin-top:16px">
 <div class="card"><h3>Key levels</h3><div class="small" style="margin-bottom:8px">Retracements measure the Oct 2022 to Oct 2026 advance.</div>
 <table id="levels"><thead><tr><th class="num">NDX</th><th>What it is</th><th>If it breaks</th></tr></thead><tbody></tbody></table></div>
-<div class="card"><h3>Base-case roadmap (Scenario A)</h3><div class="small" style="margin-bottom:8px">2022 leg ratios on closing prices, at a pace between 2022's and this year's.</div>
+<div class="card"><h3 id="roadH"></h3><div class="small" style="margin-bottom:8px" id="roadS"></div>
 <table id="road"><thead><tr><th>Checkpoint</th><th>When</th><th class="num">NDX</th></tr></thead><tbody></tbody></table>
-<p class="small" style="margin:10px 0 0">What breaks it: a rally through 28,750 that holds above the 50-day into January (shift to B), or a weekly close below 22,950 with no relief rally (shift to C).</p></div>
+<p class="small" style="margin:10px 0 0" id="roadB"></p></div>
 </div>
 </section>
 
@@ -325,7 +325,7 @@ const redraw=()=>{drawMain();drawLines($('#rates'),ratesCfg);drawLines($('#an'),
 
 document.querySelectorAll('.tools button[data-r]').forEach(b=>b.onclick=()=>{state.range=b.dataset.r;document.querySelectorAll('.tools button[data-r]').forEach(x=>x.classList.toggle('on',x===b));drawMain()});
 document.querySelectorAll('.tools button.sc').forEach(b=>b.onclick=()=>{const k=b.dataset.k;state.scen[k]=!state.scen[k];b.classList.toggle('on',state.scen[k]);drawMain()});
-document.querySelectorAll('.tools button.mf').forEach(b=>b.onclick=()=>{state.maScen=b.dataset.k;document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x===b));drawMain();maNote()});
+document.querySelectorAll('.tools button.mf').forEach(b=>b.onclick=()=>{state.maScen=b.dataset.k;document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x===b));drawMain();maNote();showRoadOnly(state.maScen)});
 $('#projBtn').onclick=e=>{state.proj=!state.proj;e.target.classList.toggle('on',state.proj);drawMain()};
 const hov=(cv,set,draw)=>{cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();set({x:e.clientX-r.left,y:e.clientY-r.top});draw()});cv.addEventListener('pointerleave',()=>{set(null);draw()})};
 hov($('#main'),h=>state.hover=h,drawMain);hov($('#rates'),h=>ratesCfg.hover=h,()=>drawLines($('#rates'),ratesCfg));hov($('#an'),h=>anCfg.hover=h,()=>drawLines($('#an'),anCfg));
@@ -343,9 +343,17 @@ $('#scn').innerHTML=[
 ['B','2018/1998-style recovery',30,'about 22,950','29,000–33,000','Dec 2026','Inflation cools and the Fed stops hiking. The December retest holds and the index reclaims its 50-day.',0],
 ['C','1987/1990-style sharper fall',20,'15,000–18,000','18,000–23,000','H1 2027','Yields break higher or capex is cut. There is no real relief rally and the second leg is fast.',0],
 ['D','2000-style collapse',5,'under 10,000','well below today','2028+','AI earnings fall 60–70% and multiples collapse together. Needs a capex bust and a recession.',0]
-].map(([k,n,p,lo,end,when,txt,base])=>`<div class="card scn${base?' base':''}"><div class="small">Scenario ${k}${base?'<span class="badge">Base case</span>':''}</div><h3>${n}</h3><div class="p">${k==='D'?'&lt;5':p}%</div><div class="barp"><i style="width:${p}%"></i></div><dl><dt>Low</dt><dd>${lo}</dd><dt>Low timing</dt><dd>${when}</dd><dt>NDX, Nov 2027</dt><dd>${end}</dd></dl><p>${txt}</p></div>`).join('');
+].map(([k,n,p,lo,end,when,txt,base])=>`<div class="card scn" data-k="${k}"><div class="small">Scenario ${k}${base?'<span class="badge">Base case</span>':''}</div><h3>${n}</h3><div class="p">${k==='D'?'&lt;5':p}%</div><div class="barp"><i style="width:${p}%"></i></div><dl><dt>Low</dt><dd>${lo}</dd><dt>Low timing</dt><dd>${when}</dd><dt>NDX, Nov 2027</dt><dd>${end}</dd></dl><p>${txt}</p></div>`).join('');
 rows('#levels',[['31,225','October 2026 record close','Bear-market thesis void'],[fmt(SD.ma[0][daily.length-1]),'50-day average (falling)','Close above, held into January: shift to B'],['28,750','61.8% retracement of leg 1','A rally beyond it weakens the 2022 template'],[fmt(m200),'200-day average; relief-rally target','Rally fails here: A confirmed'],['24,350–24,600','Leg 1 target (2022 ratios)','Expected low of leg 1'],['22,950','March 2026 low; 38.2% retracement','Weekly close below: shift to C'],['20,900','50% retracement','Base-case low zone'],['19,400–20,100','2022 template final low','Base-case target'],['18,400','61.8% retracement','1987-sized decline; C territory']],r=>`<tr><td class="num"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
-rows('#road',[['Leg 1 low','Late Nov to early Dec 2026','24,350–24,600'],['Relief-rally top','Late Dec 2026 to early Jan 2027','28,300–28,700'],['First leg-2 low','March 2027','about 20,800'],['Bear-market rally','April to May 2027','about 25,000'],['Final low','May to July 2027','19,400–20,100'],['Retest and base','Aug to Nov 2027','20,000–23,500']],r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num"><b>${r[2]}</b></td></tr>`);
+const ROAD={
+A:['Base-case roadmap (Scenario A)',"2022 leg ratios on closing prices, at a pace between 2022's and this year's.",[['Leg 1 low','Late Nov to early Dec 2026','24,350–24,600'],['Relief-rally top (fails at the 200-day)','Late Dec 2026 to early Jan 2027','28,300–28,700'],['First leg-2 low','March 2027','about 20,800'],['Bear-market rally','April to May 2027','about 25,000'],['Final low','May to July 2027','19,400–20,100'],['Retest and base','Aug to Nov 2027','20,000–23,500']],'a rally through 28,750 that holds above the 50-day into January (shift to B), or a weekly close below 22,950 with no relief rally (shift to C).'],
+B:['Recovery roadmap (Scenario B)','The 2018 and 1998 pattern: a capitulation low, a retest that holds, then a V-shaped recovery once the Fed stops tightening.',[['Capitulation low','Late Nov 2026','about 24,200'],['Retest holds above the March low, with higher RSI and MACD lows','Mid-Dec 2026','23,000–23,500'],['Rally reclaims the 50-day and tests the 200-day','Mid-Jan 2027','about 27,800'],['Pullback holds a higher low','Mid-Feb 2027','about 26,600'],['Back above the 200-day; golden cross','April 2027','about 29,800'],['Approaches the October 2026 record','July 2027','about 30,800'],['New highs','Nov 2027','29,000–33,000']],'the December retest makes new momentum lows, the rally fails under the 200-day while the 200-day turns down (shift to A), or a weekly close below 22,950 (shift to C).'],
+C:['Sharper-fall roadmap (Scenario C)','The 1987 and 1990 pattern: weak bounces, a break of the March 2026 low and a fast second leg.',[['Leg 1 low','Early Dec 2026','about 24,300'],['Weak bounce, fails under the 50-day','Mid-Dec 2026','about 25,800'],['Breaks the March 2026 low (22,950)','January 2027','about 21,000'],['Bounce fails at the old support','Late Feb 2027','about 23,400'],['Capitulation low','April 2027','15,000–18,000'],['Relief rally','June 2027','about 19,800'],['Retest of the low','August 2027','about 17,800'],['Base-building','Nov 2027','18,000–23,000']],'the index holds above 22,950 through January and rallies back to the 200-day (shift to A), or reclaims the 50-day (shift to B).'],
+D:['Collapse roadmap (Scenario D)','The 2000–02 pattern, shown in outline only. It is not drawn on the chart because it runs beyond November 2027.',[['Relief rally fails well under the 200-day','Q1 2027','26,000–28,000'],['Hyperscalers cut 2027 capex; chip earnings estimates fall','Jan to Feb 2027 results','n/a'],['Breaks the 61.8% retracement','Mid-2027','below 18,400'],['One year after the first 20% fall (2000 was −53%)','Nov 2027','12,000–15,000'],['Final low after a multi-year decline','2028 or later','under 10,000']],'capex guidance is maintained in January and February, and earnings estimates hold. Without an earnings collapse this path does not happen.']};
+function showRoadOnly(k){const R=ROAD[k];$('#roadH').textContent=R[0];$('#roadS').textContent=R[1];rows('#road',R[2],r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num"><b>${r[2]}</b></td></tr>`);$('#roadB').innerHTML='<b>What breaks it:</b> '+R[3];document.querySelectorAll('.scn').forEach(c=>c.classList.toggle('sel',c.dataset.k===k))}
+function showRoad(k){const R=ROAD[k];$('#roadH').textContent=R[0];$('#roadS').textContent=R[1];rows('#road',R[2],r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num"><b>${r[2]}</b></td></tr>`);$('#roadB').innerHTML='<b>What breaks it:</b> '+R[3];document.querySelectorAll('.scn').forEach(c=>c.classList.toggle('sel',c.dataset.k===k));
+ if(SCEN[k]){state.maScen=k;if(!state.scen[k]){state.scen[k]=true;document.querySelector(`.tools button.sc[data-k=${k}]`).classList.add('on')}document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x.dataset.k===k));drawMain();if(window.maNote)maNote()}}
+document.querySelectorAll('.scn').forEach(c=>c.onclick=()=>showRoad(c.dataset.k));showRoad('A');
 const sg={'-1':['neg','Bearish'],'0':['neu','Neutral'],'1':['pos','Bullish']};
 rows('#score',[
 ['NDX vs 200-day','11% below','Relief rally fails below it','Close above, held 2 weeks',-1],
@@ -385,7 +393,7 @@ news('#newsP',[
 ['neu','Ongoing','Oil has swung on the Iran negotiations. Higher oil feeds inflation and yields; a deal would ease both.','https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-12','Babypips'],
 ['pos','History','In every midterm year since 1950, the S&P 500 was higher 12 months after election day. A tendency, not a forecast.','#analogues','Red Beacon Market Insights, Sep 2026']]);
 
-function maNote(){const k=state.maScen,S=SD,cr=S.cross[k],f=S.fut,dd=j=>fmtD(f[j]),parts=[];const dc=cr.find(x=>x.t==='Death cross'),gc=cr.find(x=>x.t==='Golden cross');
+window.maNote=maNote;function maNote(){const k=state.maScen,S=SD,cr=S.cross[k],f=S.fut,dd=j=>fmtD(f[j]),parts=[];const dc=cr.find(x=>x.t==='Death cross'),gc=cr.find(x=>x.t==='Golden cross');
 if(dc)parts.push(`the 50-day crosses below the 200-day around <b>${dd(dc.j)}</b>`);
 if(cr.peak&&cr.peak.j<f.length-1)parts.push(`the 200-day peaks near <b>${fmt(cr.peak.v)}</b> around ${dd(cr.peak.j)} and then turns down`);else parts.push('the 200-day keeps rising through November 2027');
 if(gc)parts.push(`the 50-day crosses back above the 200-day around <b>${dd(gc.j)}</b> near ${fmt(gc.v)}`);
