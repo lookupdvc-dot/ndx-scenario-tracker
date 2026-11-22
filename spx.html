@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Red Beacon · S&amp;P 500 Scenario Tracker 2026–27</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--maroon:#651D32;--maroon2:#531627;--ivory:#E8E4DF;--card:#F3F1ED;--tan:#C4AE8B;--tan2:#A8926F;--ink:#26262B;--muted:#6B6660;--line:#D5CFC6;--up:#1F8F5B;--dn:#B3303A;--panel:#161616}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55}
+.serif{font-family:Newsreader,Georgia,serif;font-weight:400}
+header{background:var(--maroon);color:var(--ivory);position:sticky;top:0;z-index:20}
+.bar{max-width:1640px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:28px}
+.bar img{height:26px;display:block}
+.bar .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-left:auto;white-space:nowrap}
+nav{display:flex;gap:20px;flex-wrap:wrap}
+nav a{color:var(--ivory);text-decoration:none;font-size:13px;font-weight:500;opacity:.85}
+nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
+main{max-width:1640px;margin:0 auto;padding:0 28px 60px}
+.hero{position:relative;padding:44px 0 26px;overflow:hidden}
+.hero svg.fan{position:absolute;right:-40px;top:0;width:46%;height:100%;pointer-events:none}
+.eyebrow{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon);font-weight:600}
+h1{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:clamp(30px,4.2vw,52px);line-height:1.08;margin:10px 0 14px;max-width:880px;position:relative}
+.lede{font-size:18px;max-width:780px;color:#3a3a40;position:relative}
+.lede b{color:var(--maroon);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 8px;position:relative}
+.kpi{background:var(--card);border-radius:6px;padding:14px 16px}
+.kpi .v{font-family:Newsreader,Georgia,serif;font-size:30px;color:var(--maroon);line-height:1.1}
+.kpi .l{font-size:12.5px;color:var(--muted);margin-top:4px}
+section{padding-top:34px;scroll-margin-top:60px}
+.sec-h{display:flex;align-items:baseline;gap:12px;border-top:1px solid var(--maroon);padding-top:16px;margin-bottom:6px}
+.sec-h .n{font-family:Newsreader,serif;color:var(--tan2);font-size:20px}
+.sec-h h2{font-family:Newsreader,Georgia,serif;font-weight:400;font-size:30px;color:var(--maroon);margin:0}
+.sub{color:var(--muted);margin:0 0 16px;text-align:justify}
+.panel{background:var(--panel);border-radius:8px;padding:10px 10px 6px;color:#cfcfcf}
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:2px 4px 8px;font-size:12px}
+.tools .sp{flex:1}
+.tools button{background:#232323;color:#bdbdbd;border:1px solid #333;border-radius:3px;padding:4px 10px;font:500 12px Inter,sans-serif;cursor:pointer}
+.tools button.on{background:#3a5bd9;border-color:#3a5bd9;color:#fff}
+.tools button.sc.on{background:transparent;color:#fff}
+.tools button.sc[data-k=A].on{border-color:#E9DCC6;color:#E9DCC6}
+.tools button.sc[data-k=B].on{border-color:#21c77a;color:#21c77a}
+.tools button.sc[data-k=C].on{border-color:#f0464b;color:#f0464b}
+.tools button.mf{padding:4px 8px}
+.tools .lab{color:#8a8a8a;margin:0 4px 0 8px}
+canvas{display:block;width:100%}
+#main{height:clamp(700px,90vh,1000px);cursor:crosshair;touch-action:pan-y}
+.note{font-size:12.5px;color:var(--muted);margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--card);border-radius:6px;padding:18px 18px 16px}
+.card h3{font:600 15px Inter,sans-serif;margin:0 0 2px}
+.card .small{font-size:12.5px;color:var(--muted)}
+.scn .p{font-family:Newsreader,serif;font-size:38px;color:var(--maroon);line-height:1}
+.scn .barp{height:5px;background:#ddd6cb;border-radius:3px;margin:10px 0 12px;overflow:hidden}
+.scn .barp i{display:block;height:100%;background:var(--maroon)}
+.scn dl{margin:0;font-size:13px;display:grid;grid-template-columns:auto 1fr;gap:3px 10px}
+.scn dt{color:var(--muted)}.scn dd{margin:0;font-weight:500;text-align:right}
+.scn p{font-size:13px;margin:10px 0 0;color:#44444a}
+.scn{cursor:pointer;transition:outline-color .15s}.scn:hover{outline:1px solid var(--tan2)}.scn.sel,.scn.sel:hover{outline:2px solid var(--maroon)}
+.badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:3px;background:var(--maroon);color:var(--ivory);margin-left:6px;vertical-align:2px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:600;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sig{display:inline-block;min-width:74px;text-align:center;font-size:12px;font-weight:600;padding:2px 8px;border-radius:3px}
+.sig.neg{background:#f3dcdc;color:#8c1f29}.sig.neu{background:#e4dfd7;color:#55504a}.sig.pos{background:#d9ecdf;color:#17633f}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:1px}
+.dot.neg{background:var(--dn)}.dot.pos{background:var(--up)}.dot.neu{background:var(--tan2)}
+.news{list-style:none;margin:0;padding:0}
+.news li{padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.news li:last-child{border:0}
+.news .d{font-size:12px;color:var(--muted);margin-left:16px;display:block}
+.news a{color:var(--maroon)}
+.val{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.val .kpi .v{font-size:34px}
+.callout{background:var(--maroon);color:var(--ivory);border-radius:8px;padding:22px 24px;margin-top:18px}
+.callout h3{font-family:Newsreader,serif;font-weight:400;font-size:24px;margin:0 0 8px}
+.callout p{margin:0;font-size:15px;opacity:.95}
+.callout b{font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:2px 4px 8px}
+.chips button{background:transparent;border:1px solid #444;color:#999;border-radius:12px;padding:2px 10px;font:500 12px Inter,sans-serif;cursor:pointer}
+.chips button.on{color:#111;border-color:transparent}
+.updbtn{background:var(--ivory);color:var(--maroon);font:600 12px Inter,sans-serif;padding:6px 14px;border-radius:4px;text-decoration:none;white-space:nowrap}.updbtn:hover{background:#fff}
+footer{background:var(--maroon);color:var(--ivory);font-size:12.5px}
+footer div{max-width:1640px;margin:0 auto;padding:18px 28px;display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;opacity:.9}
+@media(max-width:980px){.grid2,.grid4,.val{grid-template-columns:1fr 1fr}nav{display:none}#main{height:560px}.hero svg.fan{opacity:.5}}
+@media(max-width:620px){.grid2,.grid4,.val{grid-template-columns:1fr}main{padding:0 14px 40px}.bar{padding:10px 14px}.bar .tag{display:none}table{font-size:12.5px}.wide{overflow-x:auto}.wide table{min-width:640px}}
+.ixt{display:inline-flex;border:1px solid rgba(232,228,223,.45);border-radius:5px;overflow:hidden;margin:0 18px 0 6px;flex:none}.ixt a{font:600 12px Inter,sans-serif;color:var(--ivory);padding:6px 13px;text-decoration:none;white-space:nowrap;opacity:.75}.ixt a.on{background:var(--ivory);color:var(--maroon);opacity:1}.ixt a:not(.on):hover{opacity:1;background:rgba(232,228,223,.12)}@media(max-width:900px){.ixt{margin:0 8px 0 0}.ixt a{padding:6px 9px}}</style>
+</head>
+<body>
+<header><div class="bar">
+<img src="logo.png" alt="Red Beacon">
+<div class="ixt"><a href="index.html" class="">Nasdaq 100</a><a href="spx.html" class="on">S&amp;P 500</a></div><nav><a href="#chart">Chart</a><a href="#scenarios">Scenarios</a><a href="#fundamentals">Fundamentals</a><a href="#signposts">Signposts</a><a href="#analogues">Analogues</a><a href="#calendar">Calendar</a><a href="#log">Log</a></nav>
+<span class="tag">Data to <span id="asof"></span> · Updated <span class="upd"></span></span><a class="updbtn" id="updBtn" href="claude://claude.ai/new?q=%2Fndx-update" title="Opens Claude with the update command ready to send">Update</a>
+</div></header>
+<main>
+<div class="hero">
+<svg class="fan" viewBox="0 0 100 100" preserveAspectRatio="none" id="fan" aria-hidden="true"></svg>
+<div class="eyebrow">S&amp;P 500 · correction scenario tracker · updated <span class="upd"></span></div>
+<h1>A correction, not yet a bear market. A 2022-style grind is the base case, but only just</h1>
+<p class="lede">The S&amp;P 500 closed <b id="k-dd-txt"></b> below its 6 October record, about half the Nasdaq 100's fall. The damage is narrow: technology is down 26% and the equal-weight index only 2%. On a 2022-style path a relief rally fails near the 200-day and the index reaches <b>5,700–5,900</b> around <b>Q2 2027</b>. But at 17.0× forward earnings with estimates still rising, the recovery case is a closer second than it is for the Nasdaq 100.</p>
+<div class="kpis">
+<div class="kpi"><div class="v" id="k-close"></div><div class="l">S&amp;P 500 close, <span id="k-date"></span></div></div>
+<div class="kpi"><div class="v" id="k-dd"></div><div class="l">From 7,819 peak (6 Oct)</div></div>
+<div class="kpi"><div class="v" id="k-200"></div><div class="l">Versus 200-day average</div></div>
+<div class="kpi"><div class="v" id="k-rsi"></div><div class="l">RSI 14 (oversold below 30)</div></div>
+<div class="kpi"><div class="v">4.95%</div><div class="l">US 10-year yield</div></div>
+<div class="kpi"><div class="v">17.0×</div><div class="l">Forward P/E (LSEG consensus, next 12 months)</div></div>
+<div class="kpi"><div class="v" id="k-lean"></div><div class="l" id="k-leanL"></div></div>
+</div>
+</div>
+
+<section id="chart">
+<div class="sec-h"><span class="n">01</span><h2>Price, trend and the scenario paths</h2></div>
+<p class="sub">Daily candles with the 50, 100 and 200-day averages, MACD and RSI. The dashed lines to the right are the three live scenario paths through November 2027, and the averages are carried forward along the path you pick under "Averages follow". That path is drawn heavier, with its turning points labelled, and MACD and RSI are simulated along it. Hover or tap for readings.</p>
+<div class="panel">
+<div class="tools">
+<button data-r="3M">3M</button><button data-r="6M">6M</button><button data-r="YTD" class="on">YTD</button><button data-r="5Y">5Y weekly</button>
+<span class="lab">Scenarios</span>
+<button class="sc on" data-k="A">A · 2022-style grind</button><button class="sc on" data-k="B">B · Recovery</button><button class="sc on" data-k="C">C · Sharper fall</button>
+<span class="lab">Averages follow</span><button class="mf on" data-k="A">A</button><button class="mf" data-k="B">B</button><button class="mf" data-k="C">C</button>
+<span class="sp"></span>
+<button id="projBtn" class="on">Projection</button>
+</div>
+<canvas id="main"></canvas>
+</div>
+<p class="note" id="maNote" style="font-size:13.5px;color:var(--ink)"></p>
+<p class="note">Source: LSEG Workspace, SPY daily price history scaled to the S&amp;P 500 index level (the index itself is not available on this Workspace licence). Scenario paths are illustrative roadmaps built from the 2022 leg ratios, not forecasts of exact levels. The averages to the right of the dotted line are computed from the chosen scenario path, so they show where each average would be if price followed that path. Day-to-day movement along each path is simulated at this year's typical daily swing; the projected MACD and RSI show the shape to expect, not exact readings.</p>
+</section>
+
+<section id="scenarios">
+<div class="sec-h"><span class="n">02</span><h2>Four scenarios</h2></div>
+<p class="sub">Probability-weighted, the index ends the next 12 months roughly level with Friday's close. The spread is wide: the base case has a further 15% drop along the way, and the recovery path makes new highs. Click a scenario to see its roadmap.</p>
+<div class="grid4" id="scn"></div>
+<div class="grid2" style="margin-top:16px">
+<div class="card"><h3>Key levels</h3><div class="small" style="margin-bottom:8px">Retracements measure the Oct 2022 to Oct 2026 advance.</div>
+<table id="levels"><thead><tr><th class="num">S&amp;P 500</th><th>What it is</th><th>If it breaks</th></tr></thead><tbody></tbody></table></div>
+<div class="card"><h3 id="roadH"></h3><div class="small" style="margin-bottom:8px" id="roadS"></div>
+<table id="road"><thead><tr><th>Checkpoint</th><th>When</th><th class="num">S&amp;P 500</th></tr></thead><tbody></tbody></table>
+<p class="small" style="margin:10px 0 0" id="roadB"></p></div>
+</div>
+</section>
+
+<section id="fundamentals">
+<div class="sec-h"><span class="n">03</span><h2>Fundamentals</h2></div>
+<p class="sub">Rates, valuations and newsflow. Each item is tagged by which way it points for the index.</p>
+
+<div class="grid2">
+<div>
+<div class="panel"><div class="tools"><span style="color:#e8e8e8;font-weight:500">US Treasury yields, 2026</span><span class="sp"></span><span style="color:#c5c2ea">10-year</span>&nbsp;&nbsp;<span style="color:#19a79a">2-year</span></div><canvas id="rates" style="height:300px"></canvas></div>
+<p class="note">Source: LSEG Workspace (US10YT=RR, US2YT=RR), weekly closes to 20 Nov 2026.</p>
+</div>
+<div class="card"><h3>Interest rates</h3>
+<table><tbody>
+<tr><td>Fed funds target</td><td class="num"><b>3.75–4.00%</b></td><td>Raised 25bp on 16 Sep, the first hike since 2023. Held on 28 Oct in a 10–2 vote; both dissenters wanted a hike.</td></tr>
+<tr><td>Next decision</td><td class="num"><b>9 Dec</b></td><td>Futures price roughly a 70% chance of another 25bp hike.</td></tr>
+<tr><td>10-year yield</td><td class="num"><b>4.95%</b></td><td>Up from 4.11% at the start of the year; peaked at 5.30% on 5 Oct. Fell 19bp last week as money moved into bonds.</td></tr>
+<tr><td>2-year yield</td><td class="num"><b>4.65%</b></td><td>Up 119bp this year. The market has priced the Fed's tightening.</td></tr>
+<tr><td>10-year minus 2-year</td><td class="num"><b>+0.30pp</b></td><td>The curve has flattened from +0.65pp in January.</td></tr>
+<tr><td>Inflation</td><td class="num"><b>PPI +6.5%</b></td><td>Fastest since 2022. The Fed's own year-end PCE forecast is 3.6% against a 2% target.</td></tr>
+</tbody></table>
+<p style="font-size:13.5px;margin:12px 0 0"><span class="dot neg"></span><b>Read: negative, with one improvement.</b> The Fed is still tightening and cannot easily rescue equities. But bonds rallied in Friday's sell-off, so Treasuries are working as a safe haven again. If the 10-year stays under 5%, the pressure on valuations eases.</p>
+</div>
+</div>
+
+<h3 class="serif" style="font-size:22px;color:var(--maroon);margin:26px 0 10px">Valuations</h3>
+<div class="val">
+<div class="kpi"><div class="v">17.0×</div><div class="l"><b>Forward P/E.</b> Friday's close over LSEG I/B/E/S forward four-quarter earnings of $406.90. FactSet's figure is 17.1× (five-year average 19.8×, ten-year 19.1×).</div></div>
+<div class="kpi"><div class="v">16.2×</div><div class="l"><b>P/E on 2027 earnings.</b> Friday's close over LSEG consensus 2027 earnings of $427.60.</div></div>
+<div class="kpi"><div class="v">~1.0</div><div class="l"><b>PEG.</b> Forward P/E over 2027 earnings growth of 16.4% (LSEG).</div></div>
+<div class="kpi"><div class="v">~4.5×</div><div class="l"><b>Price to book.</b> 4.8× on 18–19 Nov (ChartRow), about 4.5× at Friday's close.</div></div>
+</div>
+<div class="grid2">
+<div class="card wide"><h3>How today compares</h3>
+<table><thead><tr><th>Measure</th><th class="num">Now</th><th class="num">End 2021</th><th class="num">2000 peak</th></tr></thead><tbody>
+<tr><td>Forward P/E (next 12 months)</td><td class="num">17.0×</td><td class="num">~21×</td><td class="num">~24×</td></tr>
+<tr><td>Nasdaq 100 forward P/E (LSEG)</td><td class="num">17.1×</td><td class="num">~30×</td><td class="num">60×+</td></tr>
+<tr><td>Earnings growth, 2026 / 2027 forecast</td><td class="num">+37.1% / +16.4%</td><td class="num">strong</td><td class="num">slowing</td></tr>
+<tr><td>Earnings yield minus 10-year yield</td><td class="num">+0.9pp</td><td class="num">+3.2pp</td><td class="num">negative</td></tr>
+<tr><td>Top-10 share of the index</td><td class="num">38.6%</td><td class="num">about 30%</td><td class="num">about 25%</td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0">Sources: LSEG I/B/E/S S&amp;P 500 earnings report of 19 Nov (forward four-quarter earnings $406.90; 2026 $367.72; 2027 $427.60) and FactSet Earnings Insight of 20 Nov, via AlphaSense research run on 22 Nov 2026; top-10 share from SPY holdings on 19 Nov. Cross-check: building the multiple bottom-up from the 500 members in LSEG Workspace gives 16.7×. End-2021, 2000 and concentration figures are approximate.</p></div>
+<div class="card"><h3>What the valuations say</h3>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot pos"></span><b>Read: supportive.</b> The forward multiple is below its five and ten-year averages (FactSet: 19.8× and 19.1×) and estimates are still rising: upgrades were 66–70% of all estimate changes in each of the last four weeks. It is still above the 25-year average of 16.4×.</p>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot neg"></span><b>The index is still an AI bet.</b> The ten largest members are 38.6% of the index and technology is about 36%. Goldman attributes about half of 2026 earnings growth to AI capex. Bank of America estimates a 20% cut to 2027 AI capex would take 7–8% off 2027 index earnings.</p>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot neu"></span><b>Bonds compete.</b> The earnings yield (about 5.9%) is roughly one point above the 10-year Treasury (4.95%), far thinner than the three points at the end of 2021.</p></div>
+</div>
+
+<h3 class="serif" style="font-size:22px;color:var(--maroon);margin:26px 0 10px">Earnings estimates and AI capex</h3>
+<div class="grid2">
+<div class="card wide"><h3>Are estimates being cut?</h3><div class="small" style="margin-bottom:8px">The base case needs them to fall 15–20%. So far they are rising.</div>
+<table><thead><tr><th>Group</th><th>Last 4 weeks</th><th>Detail</th></tr></thead><tbody>
+<tr><td><b>S&amp;P 500</b></td><td><span class="sig pos">Rising</span></td><td>LSEG consensus: 2026 $367.72 (+37.1%), 2027 $427.60 (+16.4%, up from +15.6% on 1 Oct). Upgrades were 66–70% of changes in each of the last four weeks.</td></tr>
+<tr><td><b>Technology sector</b></td><td><span class="sig pos">Rising</span></td><td>Largest upgrades of any sector since 30 Sep. Consensus growth 62% for 2026 and 41% for 2027.</td></tr>
+<tr><td><b>Semiconductors</b></td><td><span class="sig pos">Rising</span></td><td>2027 estimates rose for about two-thirds of the group after Q3 results. The sector trades on about 15× forward.</td></tr>
+<tr><td><b>Nasdaq 100</b></td><td><span class="sig neu">Unclear</span></td><td>Forward earnings growth reached 42% at the end of October. No reliable index-level figure yet for the past week.</td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0">None of these sources yet reflects the 19–20 Nov sell-off. Revisions usually lag price by several weeks, so this is the first thing to recheck at each update.</p></div>
+<div class="card wide"><h3>Hyperscaler capex guidance</h3><div class="small" style="margin-bottom:8px">No company has formally cut. All figures are company guidance.</div>
+<table><thead><tr><th>Company</th><th>2026</th><th>2027</th></tr></thead><tbody>
+<tr><td><b>Microsoft</b></td><td>About $170bn (was $175bn)</td><td>To accelerate in the second half of its fiscal 2027. Trimmed 2026 on delivery delays; cancelled a $3.2bn order.</td></tr>
+<tr><td><b>Alphabet</b></td><td>$195–205bn, unchanged</td><td>Will "increase significantly".</td></tr>
+<tr><td><b>Amazon</b></td><td>About $220bn</td><td>Will "spend meaningfully more".</td></tr>
+<tr><td><b>Meta</b></td><td>$135–145bn, narrowed up</td><td>To be given in January. Has proposed equity financing.</td></tr>
+<tr><td><b>Oracle</b></td><td colspan="2">$90–95bn in fiscal 2027; raising $20bn of new capital. Peaks in fiscal 2027–28.</td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0"><span class="dot neg"></span>In Bank of America's fund manager survey, 52% expect a hyperscaler capex cut within six months. UBS sees about 30% of 2028 US data-centre additions at risk from state moratoria.</p></div>
+</div>
+<div class="card wide" style="margin-top:16px"><h3>What the strategists are saying (8–22 Nov)</h3>
+<table><thead><tr><th>Firm</th><th>S&amp;P 500 target</th><th>View</th><th>Lean</th></tr></thead><tbody>
+<tr><td><b>Morgan Stanley</b></td><td>8,700 end-2027 (raised)</td><td>"Not the moment to get bearish"; data-centre delays are manageable.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>Evercore ISI</b></td><td>n/a</td><td>A buying opportunity; new highs in the new year.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>UBS Investment Bank</b></td><td>8,900 end-2027</td><td>Long Nasdaq 100 against small caps on valuation; pauses skew 2028 estimates lower.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>Goldman Sachs</b></td><td>8,700 end-2027; bear case about 5,600</td><td>The sell-off has widened from an AI unwind into a broad growth downgrade. Lower 2028 earnings are the main risk.</td><td><span class="sig neu">Cautious</span></td></tr>
+<tr><td><b>Wells Fargo</b></td><td>8,200 end-2027 (lowest)</td><td>Slowing profits and weak sentiment, but much is priced in.</td><td><span class="sig neu">Cautious</span></td></tr>
+<tr><td><b>Bank of America</b></td><td>n/a</td><td>"Euphoria on boom &amp; AI over"; staying tactically risk-off.</td><td><span class="sig neg">Bearish</span></td></tr>
+<tr><td><b>UBS Wealth Management</b></td><td>8,200; bear case 5,500</td><td>Cut US equities to neutral on AI financing and concentration risk.</td><td><span class="sig neg">Bearish</span></td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0">Source for this section: AlphaSense research run on 22 Nov 2026, drawing on broker notes, FactSet and company filings. The S&amp;P 500 closed at 6,910 on 20 Nov. No broker published a Nasdaq 100 target in the period.</p></div>
+
+<div class="grid2" style="margin-top:16px">
+<div class="card"><h3>Constituent newsflow</h3><div class="small">Largest S&amp;P 500 members, latest first</div><ul class="news" id="newsC"></ul></div>
+<div class="card"><h3>US government and policy newsflow</h3><div class="small">Washington, the Fed and the states, latest first</div><ul class="news" id="newsP"></ul></div>
+</div>
+<div class="callout"><h3>Fundamental read</h3><p>Earnings are strong and the index trades on 17.0× forward earnings, below its ten-year average, which argues against a deep bear market unless earnings estimates are cut. But the three things that set the multiple are all unfavourable or uncertain: <b>the Fed is hiking</b>, <b>state-level policy threatens the data-centre build-out</b>, and <b>2027 capex guidance</b> does not arrive until late January. Analysts are still raising estimates and no hyperscaler has cut capex, yet half of fund managers expect a cut within six months. The market is pricing an earnings downgrade that has not happened. If it arrives, the 2022-style path plays out; if it does not, the recovery case does. The S&amp;P 500 is less exposed than the Nasdaq 100, which is why the downside targets here are shallower.</p></div>
+</section>
+
+<section id="signposts">
+<div class="sec-h"><span class="n">04</span><h2>Signpost scorecard</h2></div>
+<p class="sub">Two scores, kept separate. The trend score says what price is doing now. The fundamental score says whether the outlook is changing. Each signal is weighted 1 to 3 by importance. Together they point to the scenario the evidence leans to.</p>
+<div class="callout" id="leanBox" style="margin:0 0 16px"></div>
+<div class="card wide"><table id="score"><thead><tr><th>Signpost</th><th>Reading</th><th>Bearish if</th><th>Bullish if</th><th class="num">Weight</th><th>Signal</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="analogues">
+<div class="sec-h"><span class="n">05</span><h2>Historical analogues</h2></div>
+<p class="sub">Each line starts at 100 on the day of its peak close. Where the Fed could ease (1998, 2018) the index was higher a year after its first 10% fall. Where it could not, or easing failed (2000, 2008, 2022), it was lower.</p>
+<div class="grid2">
+<div><div class="panel"><div class="chips" id="anChips"></div><canvas id="an" style="height:380px"></canvas></div>
+<p class="note">Source: LSEG Workspace, SPY daily closes (data from 1996, so 1987 and 1990 are not shown). X-axis: trading days since the peak.</p></div>
+<div class="card wide"><table id="anT"><thead><tr><th>Episode</th><th class="num">Drop</th><th class="num">Days</th><th class="num">12m after −10%</th><th>Back to peak</th></tr></thead><tbody></tbody></table>
+<p class="small" style="margin:10px 0 0">Days are trading days from peak close to trough close. "12m after −10%" is the return over the year following the first close 10% below the peak.</p></div>
+</div>
+</section>
+
+<section id="calendar">
+<div class="sec-h"><span class="n">06</span><h2>Catalyst calendar</h2></div>
+<div class="card wide"><table id="cal"><thead><tr><th>When</th><th>Catalyst</th><th>What it decides</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section id="log">
+<div class="sec-h"><span class="n">07</span><h2>Check-in log</h2></div>
+<div class="card wide"><table id="logT"><thead><tr><th>Date</th><th class="num">S&amp;P 500</th><th class="num">Score</th><th class="num">A / B / C / D</th><th>Path</th><th>Notes</th></tr></thead><tbody></tbody></table></div>
+<p class="note">Internal research tool. This is analysis, not a recommendation. S&amp;P 500 levels are from LSEG Workspace SPY daily prices scaled to the index; valuation ratios are estimates as noted.</p>
+</section>
+</main>
+<footer><div><span>Red Beacon Asset Management · Singapore</span><span>Market data to <span id="asof2"></span> · Last updated <span class="upd"></span> (Singapore)</span></div></footer>
+
+<script src="data_spx.js"></script>
+<script>
+const $=s=>document.querySelector(s),D=window.NDX_DATA,UPDATED='2026-11-22';
+const fmt=n=>Math.round(n).toLocaleString('en-US'),MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtD=d=>`${+d.slice(8)} ${MON[+d.slice(5,7)-1]} ${d.slice(0,4)}`;
+const parse=s=>s.split(';').map(r=>{const a=r.split(','),k=a[0];return{d:`20${k.slice(0,2)}-${k.slice(2,4)}-${k.slice(4,6)}`,o:+a[1],h:+a[2],l:+a[3],c:+a[4],v:+(a[5]||0)}});
+const daily=parse(D.daily),weeklyOld=parse(D.weekly),prior=D.prior.split(',').map(Number);
+const sma=(a,n)=>a.map((_,i)=>i<n-1?null:a.slice(i-n+1,i+1).reduce((s,x)=>s+x,0)/n);
+const ema=(a,n)=>{const k=2/(n+1);let e=null;return a.map(x=>{e=e===null?x:x*k+e*(1-k);return e})};
+function macd(c){const f=ema(c,12),s=ema(c,26),m=c.map((_,i)=>f[i]-s[i]),sg=ema(m,9);return{m,sg,h:m.map((x,i)=>x-sg[i])}}
+function rsi(c,n=14){const out=[null];let ag=0,al=0;for(let i=1;i<c.length;i++){const ch=c[i]-c[i-1],g=Math.max(ch,0),l=Math.max(-ch,0);if(i<=n){ag+=g/n;al+=l/n;out.push(i===n?100-100/(1+ag/(al||1e-9)):null)}else{ag=(ag*(n-1)+g)/n;al=(al*(n-1)+l)/n;out.push(100-100/(1+ag/(al||1e-9)))}}return out}
+const wkKey=d=>{const t=new Date(d+'T00:00:00Z'),k=(t.getUTCDay()+6)%7;t.setUTCDate(t.getUTCDate()-k);return t.toISOString().slice(0,10)};
+function toWeekly(b){const m=new Map();for(const r of b){const k=wkKey(r.d),w=m.get(k);if(!w)m.set(k,{...r});else{w.h=Math.max(w.h,r.h);w.l=Math.min(w.l,r.l);w.c=r.c;w.d=r.d;w.v+=r.v}}return[...m.values()]}
+function future(mode,from){const out=[],t=new Date(from+'T00:00:00Z'),end=new Date('2027-11-19T00:00:00Z');for(;;){t.setUTCDate(t.getUTCDate()+1);if(t>end)break;const wd=t.getUTCDay();if(mode==='W'?wd===5:(wd>0&&wd<6))out.push(t.toISOString().slice(0,10))}return out}
+
+const SCEN={
+A:{name:'A',col:'#E9DCC6',pts:[['2026-12-04',6800,'Leg 1 low'],['2027-01-06',7400,'Relief top'],['2027-03-19',6150,''],['2027-04-30',6850,'Bear rally'],['2027-06-18',5830,'Final low'],['2027-08-20',6000,''],['2027-11-19',6600,'']]},
+B:{name:'B',col:'#21c77a',pts:[['2026-11-27',6750,''],['2026-12-10',6600,'Retest low'],['2027-01-15',7350,'Tests 200-day'],['2027-02-12',7150,'Higher low'],['2027-04-30',7750,'Near record'],['2027-07-30',8050,''],['2027-11-19',8300,'']]},
+C:{name:'C',col:'#f0464b',pts:[['2026-12-04',6780,'Leg 1 low'],['2026-12-18',7050,'Weak bounce'],['2027-01-29',6200,'Breaks March low'],['2027-02-26',6650,'Failed bounce'],['2027-04-16',5300,'Capitulation low'],['2027-06-11',5850,'Relief rally'],['2027-08-20',5450,'Retest'],['2027-11-19',6000,'']]}};
+function rng(seed){return()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pathFor(anch,fut,last,seed,sig){const R=rng(seed),idx=anch.map(a=>{let i=fut.findIndex(d=>d>=a[0]);return[i<0?fut.length-1:i,a[1],a[2]]}),pts=[[-1,last]].concat(idx),out=new Array(fut.length);for(let k=1;k<pts.length;k++){const[i0,v0]=pts[k-1],[i1,v1]=pts[k],n=i1-i0;if(n<=0)continue;const W=[0];for(let q=1;q<=n;q++)W.push(W[q-1]+(R()+R()+R()-1.5)*2*sig);for(let q=1;q<=n;q++)out[i0+q]=Math.exp(Math.log(v0)+(Math.log(v1)-Math.log(v0))*q/n+W[q]-q/n*W[n])}const lastI=pts[pts.length-1];for(let j=0;j<fut.length;j++)if(out[j]==null)out[j]=lastI[1];return{v:out,marks:idx}}
+function fin(bars,c,off,p,labels,tf,mode){const M=macd(c),R=rsi(c),fut=future(mode,bars[bars.length-1].d),last=bars[bars.length-1].c,paths={};for(const k in SCEN)paths[k]=pathFor(SCEN[k].pts,fut,last,k.charCodeAt(0)*7+(mode==='W'?1:0),mode==='W'?.014:.006);const pma={},cross={},pind={};for(const k in SCEN){const ext=c.concat(paths[k].v),full=p.map(n=>sma(ext,n)),M2=macd(ext);pind[k]={m:M2.m.slice(c.length),sg:M2.sg.slice(c.length),h:M2.h.slice(c.length),rsi:rsi(ext).slice(c.length)};pma[k]=full.map(a=>a.slice(c.length));cross[k]=[];let pk=c.length-1;for(let j=c.length;j<ext.length;j++){const d0=full[0][j-1]-full[2][j-1],d1=full[0][j]-full[2][j];if(d0>0&&d1<=0)cross[k].push({j:j-c.length,t:'Death cross',v:full[2][j]});if(d0<0&&d1>=0)cross[k].push({j:j-c.length,t:'Golden cross',v:full[2][j]});if(full[2][j]>full[2][pk])pk=j}cross[k].peak=pk>=c.length?{j:pk-c.length,v:full[2][pk]}:null}return{bars,tf,labels,mode,fut,paths,pma,cross,pind,ma:p.map(n=>sma(c,n).slice(off)),m:M.m.slice(off),sg:M.sg.slice(off),h:M.h.slice(off),rsi:R.slice(off),prev:off?c[off-1]:null}}
+function build(mode){if(mode==='W'){const w=toWeekly(daily),lo=weeklyOld.slice(),last=lo[lo.length-1];if(wkKey(last.d)===wkKey(w[0].d)){const f=w.shift();lo[lo.length-1]={d:f.d,o:last.o,h:Math.max(last.h,f.h),l:Math.min(last.l,f.l),c:f.c,v:f.v}}const bars=lo.concat(w);return fin(bars,bars.map(b=>b.c),0,[10,20,40],['MA 10w','MA 20w','MA 40w'],'1W','W')}
+return fin(daily,prior.concat(daily.map(b=>b.c)),prior.length,[50,100,200],['MA 50','MA 100','MA 200'],'1D','D')}
+const SD=build('D'),SW=build('W');
+const C={bg:'#161616',grid:'#242424',txt:'#a9a9a9',up:'#21c77a',dn:'#f0464b',ma:['#ff7a1a','#19a79a','#c5c2ea'],macd:'#e8e8e8',sig:'#e0b020',rsi:'#d8336f',tan:'#C4AE8B'};
+const LEVELS=[[7431,'61.8% of leg 1'],[6344,'Mar-26 low'],[6199,'38.2% retracement'],[5698,'50% retracement'],[5197,'61.8% retracement']];
+const state={range:'YTD',proj:true,scen:{A:true,B:true,C:true},maScen:'A',hover:null};
+
+function setup(cv){const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);ctx.font='11px Inter,sans-serif';return{ctx,W,H}}
+
+function drawMain(){
+const cv=$('#main'),{ctx,W,H}=setup(cv),S=state.range==='5Y'?SW:SD;
+const cnt={'3M':63,'6M':126}[state.range]||S.bars.length,n0=Math.max(0,S.bars.length-cnt);
+const bars=S.bars.slice(n0),N=bars.length,fut=state.proj?S.fut:S.fut.slice(0,4),F=fut.length,T=N+F;
+const padL=6,padR=68,pw=W-padL-padR,bw=pw/T,X=i=>padL+(i+.5)*bw;
+const top=46,axis=22,av=H-top-axis,g=8,hP=av*.62,hV=0,hM=av*.19,hR=av*.19,yP=top,yV=yP+hP,yM=yV+hV,yR=yM+hM;
+const line=(x1,y1,x2,y2,col,dash,w=1)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])};
+const text=(t,x,y,col,al='left',font='11px Inter,sans-serif')=>{ctx.font=font;ctx.fillStyle=col;ctx.textAlign=al;ctx.fillText(t,x,y);ctx.textAlign='left'};
+const drawTag=(y,t,bg,fg='#111')=>{ctx.fillStyle=bg;ctx.fillRect(W-padR+2,y-8,padR-4,16);text(t,W-padR+6,y+4,fg)},tags=[],tag=(y,t,bg,fg='#111')=>tags.push({y,t,bg,fg});const fk=state.proj&&state.scen[state.maScen]?state.maScen:null;
+let lo=Infinity,hi=-Infinity;bars.forEach(b=>{lo=Math.min(lo,b.l);hi=Math.max(hi,b.h)});
+S.ma.forEach(a=>a.slice(n0).forEach(v=>{if(v!=null){lo=Math.min(lo,v);hi=Math.max(hi,v)}}));
+if(state.proj)for(const k in SCEN)if(state.scen[k])S.paths[k].v.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v)});if(fk)S.pma[fk].forEach(a=>a.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v)}));
+const pd=(hi-lo)*.06;lo-=pd;hi+=pd;const Y=v=>yP+(hi-v)/(hi-lo)*(hP-g);
+if(F>4){ctx.fillStyle='rgba(233,220,198,.04)';ctx.fillRect(X(N)-bw/2,top,W-padR-(X(N)-bw/2),H-top-axis);line(X(N)-bw/2,top,X(N)-bw/2,H-axis,'#555',[3,3]);text('SCENARIO PROJECTION',X(N)+6,yP+12,'#8f866f','left','10px Inter,sans-serif')}
+const stp=[100,250,500,1000,2000,2500,5000].find(s=>(hi-lo)/s<=8)||5000;
+for(let v=Math.ceil(lo/stp)*stp;v<hi;v+=stp){line(padL,Y(v),W-padR,Y(v),C.grid);text(fmt(v),W-padR+6,Y(v)+4,C.txt)}
+const dates=bars.map(b=>b.d).concat(fut),perM=S.mode==='W'?4.35:21,need=46/(bw*perM),stepM=[1,2,3,6,12].find(s=>s>=need)||12;
+dates.forEach((d,i)=>{if(i&&d.slice(0,7)!==dates[i-1].slice(0,7)){const mo=+d.slice(5,7),k=(+d.slice(0,4))*12+mo-1;if(k%stepM===0){line(X(i)-bw/2,top,X(i)-bw/2,H-axis,C.grid);text(mo===1?d.slice(0,4):MON[mo-1],X(i)-bw/2+4,H-7,mo===1?'#ddd':C.txt)}}});
+LEVELS.forEach(([v,l])=>{if(v>lo&&v<hi){line(padL,Y(v),W-padR,Y(v),'rgba(196,174,139,.5)',[2,4]);text(`${l} · ${fmt(v)}`,padL+6,Y(v)-4,C.tan,'left','10.5px Inter,sans-serif')}});
+const cw=Math.max(1,Math.min(bw*.7,14));
+bars.forEach((b,i)=>{const col=b.c>=b.o?C.up:C.dn,x=Math.round(X(i))+.5;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,Y(b.h));ctx.lineTo(x,Y(b.l));ctx.stroke();const y1=Y(Math.max(b.o,b.c)),y2=Y(Math.min(b.o,b.c));ctx.fillRect(x-cw/2,y1,cw,Math.max(1,y2-y1))});
+const poly=(arr,col,Yf,w=1.4)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;let st=false;arr.forEach((v,i)=>{if(v==null)return;const x=X(i),y=Yf(v);st?ctx.lineTo(x,y):(ctx.moveTo(x,y),st=true)});ctx.stroke()};
+const polyP=(arr,col,Yf,w)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;arr.forEach((v,i)=>{const x=X(N+i),y=Yf(v);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()};
+S.ma.forEach((a,k)=>poly(a.slice(n0),C.ma[k],Y));
+if(fk){S.pma[fk].forEach((a,j)=>{ctx.beginPath();ctx.strokeStyle=C.ma[j];ctx.lineWidth=1.3;ctx.globalAlpha=.85;ctx.moveTo(X(N-1),Y(S.ma[j][S.ma[j].length-1]));a.forEach((v,i)=>ctx.lineTo(X(N+i),Y(v)));ctx.stroke();ctx.globalAlpha=1});S.cross[fk].forEach(cr=>{const x=X(N+cr.j),y=Y(cr.v);ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x+5,y);ctx.lineTo(x,y+5);ctx.lineTo(x-5,y);ctx.fill();const rt=x>W-padR-90;text(cr.t,rt?x-8:x+8,y+(cr.t[0]==='D'?17:-9),'#d8d8d8',rt?'right':'left','10.5px Inter,sans-serif')})}
+if(state.proj)for(const k in SCEN){if(!state.scen[k])continue;const P=S.paths[k],col=SCEN[k].col;ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=k===fk?2:1.4;ctx.setLineDash(k===fk?[7,4]:[3,4]);ctx.moveTo(X(N-1),Y(bars[N-1].c));P.v.forEach((v,j)=>ctx.lineTo(X(N+j),Y(v)));ctx.stroke();ctx.setLineDash([]);
+ if(k===fk)P.marks.forEach(([j,v,l],q)=>{if(!l)return;const x=X(N+j),y=Y(v),upk=q===0?false:v>P.marks[q-1][1];ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill();text(`${l} ${fmt(v)}`,x,upk?y-9:y+17,col,'center','11px Inter,sans-serif')});
+ tag(Y(P.v[P.v.length-1]),`${k} ${fmt(P.v[P.v.length-1])}`,col)}
+S.ma.forEach((a,k)=>{const v=fk?S.pma[fk][k][F-1]:a[a.length-1];if(v!=null&&v>lo&&v<hi)tag(Y(v),fmt(v),C.ma[k])});
+const L=bars[N-1],pv=N>1?bars[N-2].c:S.prev;tag(Y(L.c),fmt(L.c),L.c>=pv?C.up:C.dn,'#fff');tags.sort((a,b)=>a.y-b.y);tags.forEach((t,i)=>{if(i&&t.y-tags[i-1].y<17)t.y=tags[i-1].y+17;drawTag(t.y,t.t,t.bg,t.fg)});
+[yM,yR].forEach(y=>line(0,y-g/2,W,y-g/2,'#333'));
+const m=S.m.slice(n0),sg=S.sg.slice(n0),hh=S.h.slice(n0),mx=Math.max(...m.concat(sg,hh,fk?S.pind[fk].m:[],fk?S.pind[fk].sg:[]).map(Math.abs))*1.1||1,YM=v=>yM+(hM-g)/2-v/mx*(hM-g)/2;
+line(padL,YM(0),W-padR,YM(0),'#3a3a3a');hh.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(i)-cw/2,Math.min(YM(0),YM(v)),cw,Math.abs(YM(v)-YM(0)))});poly(m,C.macd,YM,1.2);poly(sg,C.sig,YM,1.2);if(fk){const q=S.pind[fk],pw2=Math.max(1,bw*.6);ctx.globalAlpha=.5;q.h.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(N+i)-pw2/2,Math.min(YM(0),YM(v)),pw2,Math.abs(YM(v)-YM(0)))});ctx.globalAlpha=.9;polyP(q.m,C.macd,YM,1.1);polyP(q.sg,C.sig,YM,1.1);ctx.globalAlpha=1}
+text(fmt(mx*.8),W-padR+6,YM(mx*.8)+4,C.txt);text(fmt(-mx*.8),W-padR+6,YM(-mx*.8)+4,C.txt);
+const rs=S.rsi.slice(n0),YR=v=>yR+(100-v)/100*(hR-g);[30,70].forEach(v=>{line(padL,YR(v),W-padR,YR(v),'#3a3a3a',[3,3]);text(v+'',W-padR+6,YR(v)+4,C.txt)});poly(rs,C.rsi,YR,1.3);if(fk){ctx.globalAlpha=.9;polyP(S.pind[fk].rsi,C.rsi,YR,1.2);ctx.globalAlpha=1}
+let idx=N-1;const hv=state.hover;if(hv&&hv.x>padL&&hv.x<W-padR){idx=Math.max(0,Math.min(T-1,Math.floor((hv.x-padL)/bw)));line(X(idx),top,X(idx),H-axis,'#8a8a8a',[3,3]);if(hv.y>yP&&hv.y<yP+hP-g){line(padL,hv.y,W-padR,hv.y,'#8a8a8a',[3,3]);drawTag(hv.y,fmt(hi-(hv.y-yP)/(hP-g)*(hi-lo)),'#d0d0d0')}
+ const dl=fmtD(dates[idx]);ctx.font='11px Inter,sans-serif';const tw=ctx.measureText(dl).width+12,tx=Math.max(padL,Math.min(W-padR-tw,X(idx)-tw/2));ctx.fillStyle='#d0d0d0';ctx.fillRect(tx,H-axis+2,tw,16);text(dl,tx+6,H-axis+14,'#111')}
+const seq=(parts,x,y)=>{ctx.font='12px Inter,sans-serif';parts.forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,x,y);x+=ctx.measureText(t).width+8})};
+const hb=idx<N?idx:N-1,b=bars[hb],pc=hb>0?bars[hb-1].c:(n0>0?S.bars[n0-1].c:S.prev),ch=pc?b.c-pc:0,cc=ch>=0?C.up:C.dn,narrow=W<640;
+if(idx<N)seq([[`S&P 500 · ${S.tf}`,'#e8e8e8']].concat(narrow?[]:[[fmtD(b.d),'#9a9a9a'],['O','#9a9a9a'],[fmt(b.o),cc],['H','#9a9a9a'],[fmt(b.h),cc],['L','#9a9a9a'],[fmt(b.l),cc]],[['C','#9a9a9a'],[fmt(b.c),cc],[pc?`${ch>=0?'+':'−'}${fmt(Math.abs(ch))} (${ch>=0?'+':'−'}${Math.abs(ch/pc*100).toFixed(2)}%)`:'',cc]]),10,18);
+else seq([[`S&P 500 · scenario paths · ${fmtD(dates[idx])}`,'#e8e8e8']].concat(Object.keys(SCEN).filter(k=>state.scen[k]).map(k=>[`${k} ${fmt(S.paths[k].v[idx-N])}`,SCEN[k].col])),10,18);
+if(idx>=N&&fk)seq(S.labels.map((l,k)=>[`${l}  ${fmt(S.pma[fk][k][idx-N])}`,C.ma[k]]).concat([[`projected on path ${fk}`,'#8a8a8a']]),10,36);else seq(S.labels.map((l,k)=>[`${l}  ${S.ma[k][n0+hb]!=null?fmt(S.ma[k][n0+hb]):'n/a'}`,C.ma[k]]),10,36);
+
+const pj=idx>=N&&fk?S.pind[fk]:null,pi=idx-N;ctx.font='11px Inter,sans-serif';let xx=10;[['MACD 12 26 9','#9a9a9a'],[fmt(pj?pj.h[pi]:hh[hb]),(pj?pj.h[pi]:hh[hb])>=0?C.up:C.dn],[fmt(pj?pj.m[pi]:m[hb]),C.macd],[fmt(pj?pj.sg[pi]:sg[hb]),C.sig]].concat(pj?[['simulated','#8a8a8a']]:[]).forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yM+10);xx+=ctx.measureText(t).width+8});
+xx=10;[['RSI 14','#9a9a9a'],[pj?pj.rsi[pi].toFixed(1):(rs[hb]!=null?rs[hb].toFixed(1):'n/a'),C.rsi]].concat(pj?[['simulated','#8a8a8a']]:[]).forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yR+10);xx+=ctx.measureText(t).width+8});
+}
+
+function drawLines(cv,cfg){const{ctx,W,H}=setup(cv),padL=8,padR=cfg.padR||62,top=12,bot=22,n=cfg.n,X=i=>padL+i/(n-1)*(W-padL-padR),Y=v=>top+(cfg.max-v)/(cfg.max-cfg.min)*(H-top-bot);
+const ln=(x1,y1,x2,y2,col,dash)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=1;ctx.setLineDash(dash||[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])};
+for(let v=cfg.min;v<=cfg.max+1e-9;v+=cfg.step){ln(padL,Y(v),W-padR,Y(v),C.grid);ctx.fillStyle=C.txt;ctx.fillText(cfg.fmt(v),W-padR+6,Y(v)+4)}
+cfg.xl.forEach(([i,l])=>{ln(X(i),top,X(i),H-bot,C.grid);ctx.fillStyle=C.txt;ctx.fillText(l,X(i)+4,H-7)});
+(cfg.hlines||[]).forEach(([v,l])=>{ln(padL,Y(v),W-padR,Y(v),'rgba(196,174,139,.6)',[3,4]);ctx.fillStyle=C.tan;ctx.fillText(l,padL+6,Y(v)-4)});
+ctx.save();ctx.beginPath();ctx.rect(padL,top,W-padL-padR,H-top-bot);ctx.clip();
+cfg.series.forEach(s=>{if(s.off)return;ctx.beginPath();ctx.strokeStyle=s.col;ctx.lineWidth=s.w||1.4;s.data.forEach((v,i)=>{i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v))});ctx.stroke()});ctx.restore();
+cfg.series.forEach(s=>{if(s.off)return;const i=s.data.length-1,v=s.data[i],y=Math.max(top+8,Math.min(H-bot-8,Y(v)));if(s.dot){ctx.fillStyle=s.col;ctx.beginPath();ctx.arc(X(i),Y(v),4,0,7);ctx.fill()}
+ if(i>=n-2){ctx.fillStyle=s.col;ctx.fillRect(W-padR+2,y-8,padR-4,16);ctx.fillStyle='#111';ctx.fillText(s.tag||cfg.fmt(v),W-padR+6,y+4)}else{ctx.fillStyle=s.col;ctx.fillText(s.tag||s.name,X(i)+8,Y(v)+4)}});
+const hv=cfg.hover;if(hv&&hv.x>padL&&hv.x<W-padR){const i=Math.round((hv.x-padL)/(W-padL-padR)*(n-1));ln(X(i),top,X(i),H-bot,'#8a8a8a',[3,3]);let x=padL+6;ctx.fillStyle='#e8e8e8';const t0=cfg.hl(i);ctx.fillText(t0,x,top+10);x+=ctx.measureText(t0).width+10;cfg.series.forEach(s=>{if(s.off||s.data[i]==null)return;const t=`${s.name} ${cfg.fmt(s.data[i])}`;ctx.fillStyle=s.col;ctx.fillText(t,x,top+10);x+=ctx.measureText(t).width+10})}}
+
+const yl=D.y10.split(',').map(s=>s.split(':')),ratesCfg={n:yl.length,min:3.25,max:5.5,step:.25,fmt:v=>v.toFixed(2)+'%',padR:58,
+ xl:yl.map(([d],i)=>i&&d.slice(0,2)!==yl[i-1][0].slice(0,2)&&(+d.slice(0,2))%2===1?[i,MON[+d.slice(0,2)-1]]:null).filter(Boolean),
+ hlines:[[5,'5% threshold']],hl:i=>`${+yl[i][0].slice(2)} ${MON[+yl[i][0].slice(0,2)-1]}`,
+ series:[{name:'10-year',col:'#c5c2ea',data:yl.map(a=>+a[1]),w:1.8},{name:'2-year',col:'#19a79a',data:D.y2.split(',').map(s=>+s.split(':')[1]),w:1.8}]};
+const AC={'2026':'#F3EFE6','2022':'#ff7a1a','1987':'#5aa2ff','2000':'#f0464b','2018':'#21c77a','1990':'#b08cff','1998':'#e0b020','2007':'#d8336f'};
+const anCfg={n:101,min:30,max:130,step:10,fmt:v=>Math.round(v)+'',padR:54,xl:[50,100,150,200,250].map(d=>[d/3,d+'d']),hlines:[[80,'−20%']],hl:i=>`Day ${i*3}`,
+ series:['1998','2000','2007','2018','2022','2026'].map(k=>({name:k,tag:k,col:AC[k],data:D.analogs[k].split(',').map(v=>v/10),w:k==='2026'?2.8:k==='2022'?2:1.2,dot:k==='2026',off:['1998','2007'].includes(k)}))};
+const redraw=()=>{drawMain();drawLines($('#rates'),ratesCfg);drawLines($('#an'),anCfg)};
+
+document.querySelectorAll('.tools button[data-r]').forEach(b=>b.onclick=()=>{state.range=b.dataset.r;document.querySelectorAll('.tools button[data-r]').forEach(x=>x.classList.toggle('on',x===b));drawMain()});
+document.querySelectorAll('.tools button.sc').forEach(b=>b.onclick=()=>{const k=b.dataset.k;state.scen[k]=!state.scen[k];b.classList.toggle('on',state.scen[k]);drawMain()});
+document.querySelectorAll('.tools button.mf').forEach(b=>b.onclick=()=>{state.maScen=b.dataset.k;document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x===b));drawMain();maNote();showRoadOnly(state.maScen)});
+$('#projBtn').onclick=e=>{state.proj=!state.proj;e.target.classList.toggle('on',state.proj);drawMain()};
+const hov=(cv,set,draw)=>{cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();set({x:e.clientX-r.left,y:e.clientY-r.top});draw()});cv.addEventListener('pointerleave',()=>{set(null);draw()})};
+hov($('#main'),h=>state.hover=h,drawMain);hov($('#rates'),h=>ratesCfg.hover=h,()=>drawLines($('#rates'),ratesCfg));hov($('#an'),h=>anCfg.hover=h,()=>drawLines($('#an'),anCfg));
+anCfg.series.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;const paint=()=>{b.classList.toggle('on',!s.off);b.style.background=s.off?'transparent':s.col};paint();b.onclick=()=>{s.off=!s.off;paint();drawLines($('#an'),anCfg)};$('#anChips').appendChild(b)});
+
+const last=daily[daily.length-1],peak=Math.max(...daily.map(b=>b.c)),dd=(last.c/peak-1)*100,m200=SD.ma[2][daily.length-1];
+document.querySelectorAll('.upd').forEach(e=>e.textContent=fmtD(UPDATED));$('#asof').textContent=$('#asof2').textContent=$('#k-date').textContent=fmtD(last.d);
+$('#k-close').textContent=fmt(last.c);$('#k-dd').textContent=dd.toFixed(1).replace('-','−')+'%';$('#k-dd-txt').textContent=Math.abs(dd).toFixed(1)+'%';
+$('#k-200').textContent=((last.c/m200-1)*100).toFixed(1).replace('-','−')+'%';$('#k-rsi').textContent=SD.rsi[daily.length-1].toFixed(1);
+$('#fan').innerHTML=Array.from({length:16},(_,i)=>{const bx=8+i*4.2,fx=72,fy=30,ex=fx+(fx-bx)*(fy/(100-fy));return`<line x1="${bx}" y1="100" x2="${ex}" y2="0" stroke="#C4AE8B" stroke-width="1" opacity=".55" vector-effect="non-scaling-stroke"/>`}).join('');
+
+const rows=(sel,data,f)=>{$(sel+' tbody').innerHTML=data.map(f).join('')};
+$('#scn').innerHTML=[
+['A','2022-style grind',40,'5,700–5,900','6,300–6,900','Q2 2027','The relief rally fails near the 200-day. A second leg follows as 2027 earnings estimates are cut. In 2022 the index fell 25% in total.',1],
+['B','2018/1998-style recovery',35,'about 6,600','7,900–8,700','Dec 2026','Estimates keep rising and capex guidance holds. The December retest holds above the March low and the index reclaims its 50-day.',0],
+['C','Sharper fall',20,'5,200–5,500','5,600–6,300','H1 2027','Yields break higher or capex is cut. The March 2026 low gives way and the second leg is fast.',0],
+['D','2000 or 2008-style bear market',5,'under 4,000','well below today','2028+','An earnings recession. The index halved in both 2000–02 and 2007–09.',0]
+].map(([k,n,p,lo,end,when,txt,base])=>`<div class="card scn" data-k="${k}"><div class="small">Scenario ${k}${base?'<span class="badge">Base case</span>':''}</div><h3>${n}</h3><div class="p">${k==='D'?'&lt;5':p}%</div><div class="barp"><i style="width:${p}%"></i></div><dl><dt>Low</dt><dd>${lo}</dd><dt>Low timing</dt><dd>${when}</dd><dt>S&amp;P 500, Nov 2027</dt><dd>${end}</dd></dl><p>${txt}</p></div>`).join('');
+rows('#levels',[['7,819','October 2026 record close','Correction over'],[fmt(SD.ma[0][daily.length-1]),'50-day average (falling)','Close above, held into January: shift to B'],['7,431','61.8% retracement of leg 1','A rally beyond it weakens the 2022 template'],[fmt(m200),'200-day average; relief-rally target','Rally fails here: A confirmed'],['6,800','Leg 1 target (2022 ratio, −13%)','Expected low of leg 1'],['6,344','March 2026 low','Weekly close below: shift to C'],['6,199','38.2% retracement of the 2022–26 advance','First major support'],['5,830','2022 template final low (−25%)','Scenario A target'],['5,698','50% retracement','Scenario A low zone'],['5,197','61.8% retracement','Scenario C territory']],r=>`<tr><td class="num"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
+const ROAD={
+A:['2022-style roadmap (Scenario A)','2022 leg ratios for the S&P 500 on closing prices: −13%, a relief rally of about 9% to the 200-day, then −21%; −25% in total.',[['Leg 1 low','Late Nov to early Dec 2026','about 6,800'],['Relief-rally top (fails at the 200-day)','Late Dec 2026 to early Jan 2027','7,345–7,430'],['First leg-2 low','March 2027','about 6,150'],['Bear-market rally','April to May 2027','about 6,850'],['Final low','May to July 2027','5,700–5,900'],['Retest and base','Aug to Nov 2027','6,000–6,600']],'a rally through 7,430 that holds above the 50-day into January (shift to B), or a weekly close below 6,344 with no relief rally (shift to C).'],
+B:['Recovery roadmap (Scenario B)','The 2018 and 1998 pattern: a capitulation low, a retest that holds, then a recovery once the Fed stops tightening.',[['Capitulation low','Late Nov 2026','about 6,750'],['Retest holds above the March low','Mid-Dec 2026','6,500–6,650'],['Rally reclaims the 200-day','Mid-Jan 2027','about 7,350'],['Pullback holds a higher low','Mid-Feb 2027','about 7,150'],['Approaches the October 2026 record','April 2027','about 7,750'],['New highs','July 2027','about 8,050'],['Strategist target zone','Nov 2027','7,900–8,700']],'the December retest makes new momentum lows, the rally fails under the 200-day while the 200-day turns down (shift to A), or a weekly close below 6,344 (shift to C).'],
+C:['Sharper-fall roadmap (Scenario C)','Weak bounces, a break of the March 2026 low and a fast second leg.',[['Leg 1 low','Early Dec 2026','about 6,780'],['Weak bounce, fails under the 200-day','Mid-Dec 2026','about 7,050'],['Breaks the March 2026 low (6,344)','January 2027','about 6,200'],['Bounce fails at the old support','Late Feb 2027','about 6,650'],['Capitulation low','April 2027','5,200–5,500'],['Relief rally','June 2027','about 5,850'],['Retest of the low','August 2027','about 5,450'],['Base-building','Nov 2027','5,600–6,300']],'the index holds above 6,344 through January and rallies back to the 200-day (shift to A), or reclaims the 50-day (shift to B).'],
+D:['Bear-market roadmap (Scenario D)','The 2000–02 and 2007–09 pattern, shown in outline only. It is not drawn on the chart because it runs beyond November 2027.',[['Relief rally fails well under the 200-day','Q1 2027','7,000–7,300'],['Capex cuts and broad earnings downgrades','Jan to Feb 2027 results','n/a'],['Breaks the 50% retracement','Mid-2027','below 5,698'],['Recession confirmed','Late 2027','5,000–5,500'],['Final low after a multi-year decline','2028 or later','under 4,000']],'capex guidance is maintained, earnings estimates hold and the economy avoids recession.']};
+function showRoadOnly(k){const R=ROAD[k];$('#roadH').textContent=R[0];$('#roadS').textContent=R[1];rows('#road',R[2],r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num"><b>${r[2]}</b></td></tr>`);$('#roadB').innerHTML='<b>What breaks it:</b> '+R[3];document.querySelectorAll('.scn').forEach(c=>c.classList.toggle('sel',c.dataset.k===k))}
+function showRoad(k){const R=ROAD[k];$('#roadH').textContent=R[0];$('#roadS').textContent=R[1];rows('#road',R[2],r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td class="num"><b>${r[2]}</b></td></tr>`);$('#roadB').innerHTML='<b>What breaks it:</b> '+R[3];document.querySelectorAll('.scn').forEach(c=>c.classList.toggle('sel',c.dataset.k===k));
+ if(SCEN[k]){state.maScen=k;if(!state.scen[k]){state.scen[k]=true;document.querySelector(`.tools button.sc[data-k=${k}]`).classList.add('on')}document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x.dataset.k===k));drawMain();if(window.maNote)maNote()}}
+document.querySelectorAll('.scn').forEach(c=>c.onclick=()=>showRoad(c.dataset.k));showRoad('A');
+const sg={'-1':['neg','Bearish'],'0':['neu','Neutral'],'1':['pos','Bullish']};
+const SIG=[
+['T','S&P 500 vs 200-day','6% below','Relief rally fails below it','Close above, held 2 weeks',2,-1],
+['T','200-day slope','Still rising','Turns down (by Jan if A)','Keeps rising',2,0],
+['T','50-day vs 200-day','50-day above, but rolling over','Death cross','50-day holds above',1,0],
+['T','Momentum on the retest','RSI oversold; no retest yet','New momentum lows with price','Higher RSI and MACD lows',2,0],
+['T','Breadth','46% of members above their 200-day; 37% in bear markets','More new lows on rallies','New lows shrink on the retest',1,-1],
+['T','VIX futures curve','Inverted: 28.5 front vs 26.2 second; spot VIX touched 40','Stays inverted','Back to normal slope',1,-1],
+['T','Credit (high-yield proxy)','HYG −1.2% since the peak','Widening sharply','Stable or tightening',2,0],
+['F','Earnings estimate revisions','Still rising for the S&P 500, tech and semis','Estimates cut','Estimates keep rising',3,1],
+['F','Hyperscaler capex guidance','No formal cuts; 2027 guided higher. 52% of fund managers expect a cut','Cuts or "digestion" language','Maintained or raised in Jan–Feb',3,1],
+['F','Valuation','Forward P/E 17.0×, lowest in more than three years','Estimates cut, so the multiple was false','Below average and estimates holding',2,1],
+['F','Fed decision, 9 Dec','Hiking; about 70% odds of +25bp','Hike with hawkish guidance','Skip or pause',2,-1],
+['F','Inflation','PPI +6.5% y/y; CPI due 10 Dec','Hotter than expected','Cooling',2,-1],
+['F','US 10-year yield','4.95%, down from 5.30% peak','Above 5.25%','Below 4.75%',2,0],
+['F','US policy','Data-centre moratoria pledged in 8 states; chip export rules tightened','Moratoria enacted; broader chip tariffs','Permitting reform; pledges diluted',2,-1]];
+const sc=g=>SIG.filter(r=>r[0]===g).reduce((a,r)=>a+r[5]*r[6],0),mxs=g=>SIG.filter(r=>r[0]===g).reduce((a,r)=>a+r[5],0),tS=sc('T'),fS=sc('F'),sgn=n=>(n>0?'+':n<0?'−':'')+Math.abs(n);
+const LEAN=tS<=-3&&fS<=-3?'C':(tS>=1&&fS>=1)||(fS>=5&&tS>-3)?'B':'A',LN={A:'2022-style grind',B:'Recovery',C:'Sharper fall'};
+const LTXT={A:'The price trend is negative while fundamentals are holding up. That is the usual setup for a relief rally inside a downtrend, which is the Scenario A path. It becomes B if the rally reclaims the 50-day and the trend score turns positive; it becomes C if the fundamental score falls to −3 or lower.',B:'Both the trend and the fundamentals are improving. The evidence points to the recovery path. It reverts to A if the rally fails under the 200-day.',C:'Both the trend and the fundamentals are negative. The evidence points to the sharper-fall path. It reverts to A if fundamentals stabilise.'};
+$('#leanBox').innerHTML=`<h3>Leaning to Scenario ${LEAN}: ${LN[LEAN]}</h3><p><b>Trend score ${sgn(tS)}</b> (range ±${mxs('T')}) · <b>Fundamental score ${sgn(fS)}</b> (range ±${mxs('F')}). ${LTXT[LEAN]}</p>`;
+$('#k-lean').textContent='Scenario '+LEAN;$('#k-leanL').textContent=`Signposts lean to: trend ${sgn(tS)}, fundamentals ${sgn(fS)}`;
+$('#score tbody').innerHTML=['T','F'].map(g=>`<tr><td colspan="6" style="background:#e9e4dc;font-weight:600;color:var(--maroon)">${g==='T'?'Trend: what price is doing now':'Fundamentals: what would change the outlook'} · score ${sgn(sc(g))} of ±${mxs(g)}</td></tr>`+SIG.filter(r=>r[0]===g).map(r=>`<tr><td><b>${r[1]}</b></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td class="num">${r[5]}</td><td><span class="sig ${sg[r[6]][0]}">${sg[r[6]][1]}</span></td></tr>`).join('')).join('');
+rows('#anT',[['2026 (now)','−11.6%','33','n/a','n/a'],['2022','−25.4%','195','−7.2%','Jan 2024'],['2018','−20.2%','65','+14.9%','Apr 2019'],['2007–09','−56.5%','355','−34.5%','Mar 2013'],['2000–02','−49%','about 640','about −13%','May 2007'],['1998','−19.6%','31','+25.6%','Nov 1998']],r=>`<tr><td><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td></tr>`);
+rows('#cal',[['Late Nov – early Dec 2026','Leg 1 low (target about 6,800)','Start of the relief rally'],['1–2 Dec 2026','House committee interviews on Nvidia (requested)','Headline risk for the largest index member'],['9 Dec 2026','Fed decision','A hawkish hike raises C risk; a skip helps B'],['10 Dec 2026','November CPI','Cooling or hotter inflation'],['Late Dec 2026 – early Jan 2027','Year-end seasonality; relief-rally top window','Test of the 200-day'],['Late Jan – Feb 2027','Hyperscaler Q4 results and 2027 capex guidance','Main trigger for leg 2, or for B'],['Jan 2027 onwards','New governors take office in Texas, Georgia and Ohio','Whether moratoria pledges become policy'],['Late Feb 2027','Nvidia Q4 results','AI demand confirmation'],['Mar – Apr 2027','First leg-2 low window (Scenario A)','About 6,150'],['May 2027','Q1 earnings; bear-market rally window','About 6,850'],['May – Jul 2027','Final low window (Scenario A)','5,700–5,900']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
+rows('#logT',[['22 Nov 2026','6,910','Trend −4, fundamentals +2','40 / 35 / 20 / 5','Leg 1, about 90% complete on the 2022 template','First S&amp;P 500 reading. Estimates still rising (upgrades 66–70% of changes), 46% of members above their 200-day, equal weight down only 2% since the record. Same macro signposts as the Nasdaq 100; shallower targets because the fall is concentrated in technology.']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`);
+const news=(sel,items)=>{$(sel).innerHTML=items.map(([s,d,t,u,src])=>`<li><span class="dot ${s}"></span>${t}<span class="d">${d} · <a href="${u}">${src}</a></span></li>`).join('')};
+news('#newsC',[
+['neg','20 Nov','Chip stocks fell 10.7% in a day. Nvidia fell 14% to $125.53, about 48% below its October record, after Reuters reported the SEC is examining its accounting. The inquiry is civil and at an early stage.','https://aiweekly.co/alerts/nasdaq-100-drops-56-friday-capping-worst-week-since-2020','AI Weekly'],
+['neg','20 Nov','71 of the 101 Nasdaq 100 members are now in their own bear markets, including all 20 semiconductor and memory names.','https://finance.yahoo.com/markets/live/stock-market-today-friday-november-19-dow-sp-500-nasdaq-anthropic-nvidia-141644188.html','Yahoo Finance'],
+['pos','17 Nov','Nvidia reported revenue of $115.8bn, up 103% on the year, and guided next quarter to $130bn with no China data-centre sales assumed.','https://www.ibtimes.com/nvidia-record-revenue-130-billion-outlook-china-3809889','IBTimes'],
+['neg','12–17 Nov','Jensen Huang resigned as Nvidia CEO; the board says it will not reinstate him. House committee interviews are requested for 1–2 Dec.','https://www.wealthprofessional.ca/investments/equity-markets/wall-street-absorbs-the-hit-as-nvidia-touches-a-52-week-low/394013','Wealth Professional'],
+['neg','4–5 Nov','Qualcomm guided below expectations and had its biggest fall since 2020. Micron paused a $4.5bn plant; SanDisk fell 22% and Micron 17% in the week.','https://www.xtb.com/en/market-analysis/nasdaq-sell-off-technology-stocks-suffer-heavy-losses','XTB'],
+['neg','30 Oct – 2 Nov','Intel fell 29% on results. Oracle fell 9% after announcing a $20bn debt and stock sale to fund AI capacity.','https://247wallst.com/investing/2026/11/03/the-nasdaq-100-is-now-officially-in-a-correction/','24/7 Wall St'],
+['pos','28 Oct','Amazon, Alphabet, Microsoft and Meta guided fourth-quarter capex to as much as $270bn, above the third quarter. Alphabet kept its 2026 range of $195–205bn.','https://fourweekmba.com/ai-big-tech-and-spacex-guide-q4-capex-up-to-270b-above-q3/','FourWeekMBA'],
+['neg','Nov','Microsoft trimmed 2026 capex to about $170bn on delivery delays, did not renew an Oracle AI capacity rental and cancelled a $3.2bn order with Nscale.','#fundamentals','AlphaSense research, 22 Nov']]);
+news('#newsP',[
+['neg','17 Nov','The Commerce Department tightened export rules on advanced AI chips, closing loopholes used to reach China through third countries.','https://www.csmonitor.com/USA/Politics/2026/1118/nvidia-chips-export-bessent-lutnick','CS Monitor'],
+['neg','6 Nov','About 40% of planned US data-centre capacity is in states whose incoming governors campaigned to pause construction. Governors in eight states have pledged pauses, and all 32 local ballot measures favoured limits.','https://www.insurancejournal.com/news/midwest/2026/11/06/891870.htm','Bloomberg via Insurance Journal'],
+['pos','4–6 Nov','The pledges are not yet law: governors\' powers depend on state legislatures. Bernstein expects states to "go for the wallet, not the off switch".','https://www.techtarget.com/news/data-center-boom-could-hit-a-political-wall-after-midterms/874019/','TechTarget'],
+['neg','28 Oct','The Fed held at 3.75–4.00% but two members voted to hike. Chair Warsh says inflation "is too high and has been too long". A December hike is largely priced.','https://admiralmarkets.com/analytics/traders-blog/warsh-press-conference-october-2026','Admiral Markets'],
+['neg','Nov','The 10-year Treasury spent its longest stretch above 5% since 2007 before easing to 4.95%. Treasury left long-bond auction sizes unchanged.','https://247wallst.com/investing/2026/11/18/two-more-days-above-5-and-treasury-yields-tie-2007s-run/','24/7 Wall St'],
+['neu','Ongoing','A 25% tariff on certain advanced chips has applied since January. The White House has said broader semiconductor tariffs may follow.','https://www.whitehouse.gov/fact-sheets/2026/01/fact-sheet-president-donald-j.-trump-takes-action-on-certain-advanced-computing-chips-to-protect-americas-economic-and-national-security/','White House'],
+['neu','Ongoing','Oil has swung on the Iran negotiations. Higher oil feeds inflation and yields; a deal would ease both.','https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-12','Babypips'],
+['pos','History','In every midterm year since 1950, the S&P 500 was higher 12 months after election day. A tendency, not a forecast.','#analogues','Red Beacon Market Insights, Sep 2026']]);
+
+window.maNote=maNote;function maNote(){const k=state.maScen,S=SD,cr=S.cross[k],f=S.fut,dd=j=>fmtD(f[j]),parts=[];const dc=cr.find(x=>x.t==='Death cross'),gc=cr.find(x=>x.t==='Golden cross');
+if(dc)parts.push(`the 50-day crosses below the 200-day around <b>${dd(dc.j)}</b>`);
+if(cr.peak&&cr.peak.j<f.length-1)parts.push(`the 200-day peaks near <b>${fmt(cr.peak.v)}</b> around ${dd(cr.peak.j)} and then turns down`);else parts.push('the 200-day keeps rising through November 2027');
+if(gc)parts.push(`the 50-day crosses back above the 200-day around <b>${dd(gc.j)}</b> near ${fmt(gc.v)}`);
+const tops={A:[1,3],B:[2,4],C:[1,3]}[k].map(q=>S.paths[k].marks[q]).map(([j,v])=>`${dd(j)}: price ${fmt(v)} against a 50-day of ${fmt(S.pma[k][0][j])} and a 200-day of ${fmt(S.pma[k][2][j])}`);
+$('#maNote').innerHTML=`<b>On path ${k}:</b> ${parts.join('; ')}. At the rally highs: ${tops.join('; ')}.`}
+maNote();
+new ResizeObserver(redraw).observe(document.body);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+</script>
+<script>document.querySelectorAll(".ixt a:not(.on)").forEach(a=>a.addEventListener("click",()=>{let h="";document.querySelectorAll("main section[id]").forEach(s=>{if(s.getBoundingClientRect().top<140)h="#"+s.id});a.href=a.getAttribute("href").split("#")[0]+h}));</script></body>
+</html>

@@ -88,12 +88,12 @@ footer{background:var(--maroon);color:var(--ivory);font-size:12.5px}
 footer div{max-width:1640px;margin:0 auto;padding:18px 28px;display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;opacity:.9}
 @media(max-width:980px){.grid2,.grid4,.val{grid-template-columns:1fr 1fr}nav{display:none}#main{height:560px}.hero svg.fan{opacity:.5}}
 @media(max-width:620px){.grid2,.grid4,.val{grid-template-columns:1fr}main{padding:0 14px 40px}.bar{padding:10px 14px}.bar .tag{display:none}table{font-size:12.5px}.wide{overflow-x:auto}.wide table{min-width:640px}}
-</style>
+.ixt{display:inline-flex;border:1px solid rgba(232,228,223,.45);border-radius:5px;overflow:hidden;margin:0 18px 0 6px;flex:none}.ixt a{font:600 12px Inter,sans-serif;color:var(--ivory);padding:6px 13px;text-decoration:none;white-space:nowrap;opacity:.75}.ixt a.on{background:var(--ivory);color:var(--maroon);opacity:1}.ixt a:not(.on):hover{opacity:1;background:rgba(232,228,223,.12)}@media(max-width:900px){.ixt{margin:0 8px 0 0}.ixt a{padding:6px 9px}}</style>
 </head>
 <body>
 <header><div class="bar">
 <img src="logo.png" alt="Red Beacon">
-<nav><a href="#chart">Chart</a><a href="#scenarios">Scenarios</a><a href="#fundamentals">Fundamentals</a><a href="#signposts">Signposts</a><a href="#analogues">Analogues</a><a href="#calendar">Calendar</a><a href="#log">Log</a></nav>
+<div class="ixt"><a href="index.html" class="on">Nasdaq 100</a><a href="spx.html" class="">S&amp;P 500</a></div><nav><a href="#chart">Chart</a><a href="#scenarios">Scenarios</a><a href="#fundamentals">Fundamentals</a><a href="#signposts">Signposts</a><a href="#analogues">Analogues</a><a href="#calendar">Calendar</a><a href="#log">Log</a></nav>
 <span class="tag">Data to <span id="asof"></span> · Updated <span class="upd"></span></span><a class="updbtn" id="updBtn" href="claude://claude.ai/new?q=%2Fndx-update" title="Opens Claude with the update command ready to send">Update</a>
 </div></header>
 <main>
@@ -108,7 +108,7 @@ footer div{max-width:1640px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 <div class="kpi"><div class="v" id="k-200"></div><div class="l">Versus 200-day average</div></div>
 <div class="kpi"><div class="v" id="k-rsi"></div><div class="l">RSI 14 (oversold below 30)</div></div>
 <div class="kpi"><div class="v">4.95%</div><div class="l">US 10-year yield</div></div>
-<div class="kpi"><div class="v">~17×</div><div class="l">Forward P/E (range 16.3–18.7×)</div></div>
+<div class="kpi"><div class="v">17.1×</div><div class="l">Forward P/E (LSEG consensus, next 12 months)</div></div>
 <div class="kpi"><div class="v" id="k-lean"></div><div class="l" id="k-leanL"></div></div>
 </div>
 </div>
@@ -168,24 +168,24 @@ footer div{max-width:1640px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 
 <h3 class="serif" style="font-size:22px;color:var(--maroon);margin:26px 0 10px">Valuations</h3>
 <div class="val">
-<div class="kpi"><div class="v">~17×</div><div class="l"><b>Forward P/E.</b> Providers range from 16.3× (2027 earnings) to 18.7× (next 12 months). Ten-year average about 23×.</div></div>
-<div class="kpi"><div class="v">~23.9×</div><div class="l"><b>Trailing P/E.</b> Providers range from 22× to 26×; ten-year average 23.7× (FactSet). About 38× at the end of 2021 and over 100× in 2000.</div></div>
+<div class="kpi"><div class="v">17.1×</div><div class="l"><b>Forward P/E.</b> LSEG I/B/E/S consensus next-12-month earnings for each of the 101 members, combined using Nasdaq's official index weights, at the 20 Nov close. Ten-year average about 23×.</div></div>
+<div class="kpi"><div class="v">24.0×</div><div class="l"><b>Trailing P/E.</b> LSEG Workspace index figure, 20 Nov; ten-year average 23.7× (FactSet). About 38× at the end of 2021 and over 100× in 2000.</div></div>
 <div class="kpi"><div class="v">0.6–1.0</div><div class="l"><b>PEG.</b> About 0.6 on next-year earnings growth of 28%; about 1.0 on the slower 2027 calendar-year growth rate.</div></div>
 <div class="kpi"><div class="v">~7×</div><div class="l"><b>Price to book.</b> 7.5× on 18 Nov (ChartRow), about 7× at Friday's close. High because the largest members hold few physical assets.</div></div>
 </div>
 <div class="grid2">
 <div class="card wide"><h3>How today compares</h3>
 <table><thead><tr><th>Measure</th><th class="num">Now</th><th class="num">End 2021</th><th class="num">2000 peak</th></tr></thead><tbody>
-<tr><td>Trailing P/E</td><td class="num">~24×</td><td class="num">~38×</td><td class="num">100×+</td></tr>
-<tr><td>Forward P/E</td><td class="num">16.3–18.7×</td><td class="num">~30×</td><td class="num">60×+</td></tr>
-<tr><td>S&amp;P 500 forward P/E</td><td class="num">17.1×</td><td class="num">~21×</td><td class="num">~24×</td></tr>
+<tr><td>Trailing P/E</td><td class="num">24.0×</td><td class="num">~38×</td><td class="num">100×+</td></tr>
+<tr><td>Forward P/E (next 12 months)</td><td class="num">17.1×</td><td class="num">~30×</td><td class="num">60×+</td></tr>
+<tr><td>S&amp;P 500 forward P/E (LSEG)</td><td class="num">17.0×</td><td class="num">~21×</td><td class="num">~24×</td></tr>
 <tr><td>Earnings growth, last 12 months</td><td class="num">+49%</td><td class="num">strong</td><td class="num">thin or none</td></tr>
-<tr><td>Nvidia forward P/E</td><td class="num">~9–10×</td><td class="num">Apple ~30×</td><td class="num">Cisco 130×+</td></tr>
+<tr><td>Nvidia forward P/E</td><td class="num">8.1×</td><td class="num">Apple ~30×</td><td class="num">Cisco 130×+</td></tr>
 <tr><td>Earnings yield minus 10-year yield</td><td class="num">+0.9pp</td><td class="num">+1.8pp</td><td class="num">negative</td></tr>
 </tbody></table>
-<p class="small" style="margin:10px 0 0">Sources: AlphaSense research run on 22 Nov 2026, citing FactSet (S&amp;P 500 at 17.1× on 20 Nov; Nasdaq 100 trailing 22.9× on 19 Nov), XTB (18.7× on 17 Nov), Bloomberg 2027 P/E (18.3× on 13 Nov, about 16.4× at Friday's close) and ChartRow; cross-checked against <a href="https://dollarliquidity.com/en/valuation/nasdaq-100-forward-pe">DollarLiquidity</a> and <a href="https://www.gurufocus.com/economic_indicators/6778/nasdaq-100-pe-ratio">GuruFocus</a>. There is no single consensus series for the Nasdaq 100, and providers differ by two to three turns, so read these as a range. End-2021 and 2000 figures are approximate.</p></div>
+<p class="small" style="margin:10px 0 0">Headline forward P/E: LSEG Workspace I/B/E/S mean estimates for each member, read on 22 Nov 2026 at 20 Nov closes, weighted by Nasdaq's published index weights of 2 Nov rolled forward for price moves. Implied index earnings are about 1,460 points. Other providers, for reference: AlphaSense research run on 22 Nov 2026, citing FactSet (S&amp;P 500 at 17.1× on 20 Nov; Nasdaq 100 trailing 22.9× on 19 Nov), XTB (18.7× on 17 Nov), Bloomberg 2027 P/E (18.3× on 13 Nov, about 16.4× at Friday's close) and ChartRow; cross-checked against <a href="https://dollarliquidity.com/en/valuation/nasdaq-100-forward-pe">DollarLiquidity</a> and <a href="https://www.gurufocus.com/economic_indicators/6778/nasdaq-100-pe-ratio">GuruFocus</a>. The LSEG figure is the single series tracked from 22 Nov; Bloomberg's blended figure was 18.8× on 9 Nov, about 16.8× at Friday's close. End-2021 and 2000 figures are approximate.</p></div>
 <div class="card"><h3>What the valuations say</h3>
-<p style="font-size:13.5px;margin:6px 0"><span class="dot pos"></span><b>Read: supportive, with a catch.</b> A 20% price fall with rising earnings estimates has taken the forward multiple from about 23× at the end of September to about 17×, the lowest since late 2022. Its premium to the S&amp;P 500 is about 5%, against a ten-year average of about 20%. This is nothing like 2000, when the index traded on more than 100× trailing earnings.</p>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot pos"></span><b>Read: supportive, with a catch.</b> A 20% price fall with rising earnings estimates has taken the forward multiple from about 23× at the end of September to 17.1×, the lowest since late 2022. Its premium to the S&amp;P 500 (17.0× on LSEG estimates) has all but gone, against a ten-year average of about 20%. This is nothing like 2000, when the index traded on more than 100× trailing earnings.</p>
 <p style="font-size:13.5px;margin:6px 0"><span class="dot neg"></span><b>The catch is the "E".</b> The multiple is only cheap if AI earnings hold. Semiconductor profits are cyclical, and a low P/E on peak earnings is the classic trap. If hyperscalers cut 2027 capex, forward earnings fall and the same price looks expensive again.</p>
 <p style="font-size:13.5px;margin:6px 0"><span class="dot neu"></span><b>Bonds compete.</b> The index's earnings yield (about 5.9%) is roughly one point above the 10-year Treasury (4.95%). That gap has reopened in the sell-off but is still thinner than the 1.8 points at the end of 2021.</p></div>
 </div>
@@ -226,7 +226,7 @@ footer div{max-width:1640px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 <div class="card"><h3>Constituent newsflow</h3><div class="small">Nasdaq 100 members, latest first</div><ul class="news" id="newsC"></ul></div>
 <div class="card"><h3>US government and policy newsflow</h3><div class="small">Washington, the Fed and the states, latest first</div><ul class="news" id="newsP"></ul></div>
 </div>
-<div class="callout"><h3>Fundamental read</h3><p>Earnings are strong and the index now trades on about 17× forward earnings, which argues against a 2000-style collapse and means much of the base-case fall would need earnings estimates to be cut, not just multiples to fall. But the three things that set the multiple are all unfavourable or uncertain: <b>the Fed is hiking</b>, <b>state-level policy threatens the data-centre build-out</b>, and <b>2027 capex guidance</b> does not arrive until late January. Analysts are still raising estimates and no hyperscaler has cut capex, yet half of fund managers expect a cut within six months. The market is pricing an earnings downgrade that has not happened. If it arrives, the base case plays out; if it does not, the recovery case does.</p></div>
+<div class="callout"><h3>Fundamental read</h3><p>Earnings are strong and the index now trades on 17.1× forward earnings, which argues against a 2000-style collapse and means much of the base-case fall would need earnings estimates to be cut, not just multiples to fall. But the three things that set the multiple are all unfavourable or uncertain: <b>the Fed is hiking</b>, <b>state-level policy threatens the data-centre build-out</b>, and <b>2027 capex guidance</b> does not arrive until late January. Analysts are still raising estimates and no hyperscaler has cut capex, yet half of fund managers expect a cut within six months. The market is pricing an earnings downgrade that has not happened. If it arrives, the base case plays out; if it does not, the recovery case does.</p></div>
 </section>
 
 <section id="signposts">
@@ -400,7 +400,7 @@ const SIG=[
 ['T','Credit (high-yield proxy)','HYG −1.2% since the peak','Widening sharply','Stable or tightening',2,0],
 ['F','Earnings estimate revisions','Still rising for the S&P 500, tech and semis','Estimates cut','Estimates keep rising',3,1],
 ['F','Hyperscaler capex guidance','No formal cuts; 2027 guided higher. 52% of fund managers expect a cut','Cuts or "digestion" language','Maintained or raised in Jan–Feb',3,1],
-['F','Valuation','Forward P/E about 17×, lowest since 2022','Estimates cut, so the multiple was false','Below average and estimates holding',2,1],
+['F','Valuation','Forward P/E 17.1×, lowest since 2022','Estimates cut, so the multiple was false','Below average and estimates holding',2,1],
 ['F','Fed decision, 9 Dec','Hiking; about 70% odds of +25bp','Hike with hawkish guidance','Skip or pause',2,-1],
 ['F','Inflation','PPI +6.5% y/y; CPI due 10 Dec','Hotter than expected','Cooling',2,-1],
 ['F','US 10-year yield','4.95%, down from 5.30% peak','Above 5.25%','Below 4.75%',2,0],
@@ -413,7 +413,7 @@ $('#k-lean').textContent='Scenario '+LEAN;$('#k-leanL').textContent=`Signposts l
 $('#score tbody').innerHTML=['T','F'].map(g=>`<tr><td colspan="6" style="background:#e9e4dc;font-weight:600;color:var(--maroon)">${g==='T'?'Trend: what price is doing now':'Fundamentals: what would change the outlook'} · score ${sgn(sc(g))} of ±${mxs(g)}</td></tr>`+SIG.filter(r=>r[0]===g).map(r=>`<tr><td><b>${r[1]}</b></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td class="num">${r[5]}</td><td><span class="sig ${sg[r[6]][0]}">${sg[r[6]][1]}</span></td></tr>`).join('')).join('');
 rows('#anT',[['2026 (now)','−19.8%','33','n/a','n/a'],['2021–22','−35.6%','277','−6.5%','Dec 2023'],['2018','−23.0%','80','+43.8%','Apr 2019'],['2007–08','−53.7%','267','−34.3%','Jan 2011'],['2000–02','−82.9%','634','−52.8%','Nov 2015'],['1998','−23.0%','57','+110.2%','Nov 1998'],['1990','−32.9%','62','+38.2%','Feb 1991'],['1987','−39.9%','15','+13.7%','May 1989']],r=>`<tr><td><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td></tr>`);
 rows('#cal',[['Late Nov – early Dec 2026','Leg 1 low (target 24,350–24,600)','Start of the relief rally'],['1–2 Dec 2026','House committee interviews on Nvidia (requested)','Headline risk for the largest index member'],['9 Dec 2026','Fed decision','A hawkish hike raises C risk; a skip helps B'],['10 Dec 2026','November CPI','Cooling or hotter inflation'],['Late Dec 2026 – early Jan 2027','Year-end seasonality; relief-rally top window','Test of the 200-day'],['Late Jan – Feb 2027','Hyperscaler Q4 results and 2027 capex guidance','Main trigger for leg 2, or for B'],['Jan 2027 onwards','New governors take office in Texas, Georgia and Ohio','Whether moratoria pledges become policy'],['Late Feb 2027','Nvidia Q4 results','AI demand confirmation'],['Mar – Apr 2027','First leg-2 low window','About 20,800'],['May 2027','Q1 earnings; bear-market rally window','About 25,000'],['May – Jul 2027','Final low window','19,400–20,100']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
-rows('#logT',[['22 Nov 2026 (update 2)','25,029','Trend −4, fundamentals +2','40 / 35 / 20 / 5','Leg 1, about 90% complete; leaning A','AlphaSense and Workspace review. Earnings estimates are still rising and no hyperscaler has cut capex, so the whole de-rating has come from price. Scenario A needs estimate cuts of 15–20% that have not started: moved 5 points from A to B. Scorecard split into trend and fundamental scores. No new price data (weekend).'],['22 Nov 2026','25,029','−5 (old method)','45 / 30 / 20 / 5','Leg 1, about 90% complete','Baseline. History verified against LSEG daily closes. Fundamentals added: valuation supportive, rates and policy negative. Next: leg 1 low near 24,350–24,600, then the Fed on 9 Dec and CPI on 10 Dec.']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`);
+rows('#logT',[['22 Nov 2026 (update 2)','25,029','Trend −4, fundamentals +2','40 / 35 / 20 / 5','Leg 1, about 90% complete; leaning A','AlphaSense and Workspace review. Earnings estimates are still rising and no hyperscaler has cut capex, so the whole de-rating has come from price. Scenario A needs estimate cuts of 15–20% that have not started: moved 5 points from A to B. Scorecard split into trend and fundamental scores. No new price data (weekend). Later the same day: forward P/E now a single LSEG consensus series (17.1×) in place of the provider range, and an S&amp;P 500 page added.'],['22 Nov 2026','25,029','−5 (old method)','45 / 30 / 20 / 5','Leg 1, about 90% complete','Baseline. History verified against LSEG daily closes. Fundamentals added: valuation supportive, rates and policy negative. Next: leg 1 low near 24,350–24,600, then the Fed on 9 Dec and CPI on 10 Dec.']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`);
 const news=(sel,items)=>{$(sel).innerHTML=items.map(([s,d,t,u,src])=>`<li><span class="dot ${s}"></span>${t}<span class="d">${d} · <a href="${u}">${src}</a></span></li>`).join('')};
 news('#newsC',[
 ['neg','20 Nov','Chip stocks fell 10.7% in a day. Nvidia fell 14% to $125.53, about 48% below its October record, after Reuters reported the SEC is examining its accounting. The inquiry is civil and at an early stage.','https://aiweekly.co/alerts/nasdaq-100-drops-56-friday-capping-worst-week-since-2020','AI Weekly'],
@@ -444,5 +444,5 @@ maNote();
 new ResizeObserver(redraw).observe(document.body);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
 </script>
-</body>
+<script>document.querySelectorAll(".ixt a:not(.on)").forEach(a=>a.addEventListener("click",()=>{let h="";document.querySelectorAll("main section[id]").forEach(s=>{if(s.getBoundingClientRect().top<140)h="#"+s.id});a.href=a.getAttribute("href").split("#")[0]+h}));</script></body>
 </html>
