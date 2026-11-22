@@ -14,7 +14,7 @@ body{margin:0;background:var(--ivory);color:var(--ink);font-family:Inter,system-
 header{background:var(--maroon);color:var(--ivory);position:sticky;top:0;z-index:20}
 .bar{max-width:1320px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:28px}
 .bar img{height:26px;display:block}
-.bar .tag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;opacity:.85;margin-left:auto;white-space:nowrap}
+.bar .tag{font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-left:auto;white-space:nowrap}
 nav{display:flex;gap:20px;flex-wrap:wrap}
 nav a{color:var(--ivory);text-decoration:none;font-size:13px;font-weight:500;opacity:.85}
 nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
@@ -83,6 +83,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:now
 .chips{display:flex;flex-wrap:wrap;gap:6px;padding:2px 4px 8px}
 .chips button{background:transparent;border:1px solid #444;color:#999;border-radius:12px;padding:2px 10px;font:500 12px Inter,sans-serif;cursor:pointer}
 .chips button.on{color:#111;border-color:transparent}
+.updbtn{background:var(--ivory);color:var(--maroon);font:600 12px Inter,sans-serif;padding:6px 14px;border-radius:4px;text-decoration:none;white-space:nowrap}.updbtn:hover{background:#fff}
 footer{background:var(--maroon);color:var(--ivory);font-size:12.5px}
 footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;opacity:.9}
 @media(max-width:980px){.grid2,.grid4,.val{grid-template-columns:1fr 1fr}nav{display:none}#main{height:560px}.hero svg.fan{opacity:.5}}
@@ -93,28 +94,28 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 <header><div class="bar">
 <img src="logo.png" alt="Red Beacon">
 <nav><a href="#chart">Chart</a><a href="#scenarios">Scenarios</a><a href="#fundamentals">Fundamentals</a><a href="#signposts">Signposts</a><a href="#analogues">Analogues</a><a href="#calendar">Calendar</a><a href="#log">Log</a></nav>
-<span class="tag">NDX Scenario Tracker · <span id="asof"></span></span>
+<span class="tag">Data to <span id="asof"></span> · Updated <span class="upd"></span></span><a class="updbtn" id="updBtn" href="claude://claude.ai/new?q=%2Fndx-update" title="Opens Claude with the update command ready to send">Update</a>
 </div></header>
 <main>
 <div class="hero">
 <svg class="fan" viewBox="0 0 100 100" preserveAspectRatio="none" id="fan" aria-hidden="true"></svg>
-<div class="eyebrow">Nasdaq 100 · bear-market scenario tracker · 2026–27</div>
+<div class="eyebrow">Nasdaq 100 · bear-market scenario tracker · updated <span class="upd"></span></div>
 <h1>A 2022-style grind lower is the base case, with the low still ahead</h1>
-<p class="lede">The NDX closed <b id="k-dd-txt"></b> below its 6 October record. The base case is a relief rally that fails near the 200-day, then a second leg to <b>19,400–20,100</b> around <b>Q2 2027</b>. Valuations have reset to a five-year low on forward earnings, but rates and policy still lean against the index.</p>
+<p class="lede">The NDX closed <b id="k-dd-txt"></b> below its 6 October record. The base case is a relief rally that fails near the 200-day, then a second leg to <b>19,400–20,100</b> around <b>Q2 2027</b>. That path needs earnings estimates to be cut, and so far they are still rising, so the recovery case now carries 35%.</p>
 <div class="kpis">
 <div class="kpi"><div class="v" id="k-close"></div><div class="l">NDX close, <span id="k-date"></span></div></div>
 <div class="kpi"><div class="v" id="k-dd"></div><div class="l">From 31,225 peak (6 Oct)</div></div>
 <div class="kpi"><div class="v" id="k-200"></div><div class="l">Versus 200-day average</div></div>
 <div class="kpi"><div class="v" id="k-rsi"></div><div class="l">RSI 14 (oversold below 30)</div></div>
 <div class="kpi"><div class="v">4.95%</div><div class="l">US 10-year yield</div></div>
-<div class="kpi"><div class="v">~16.5×</div><div class="l">Forward P/E (2027 earnings)</div></div>
-<div class="kpi"><div class="v">−5</div><div class="l">Net signpost score (13 signals)</div></div>
+<div class="kpi"><div class="v">~17×</div><div class="l">Forward P/E (range 16.3–18.7×)</div></div>
+<div class="kpi"><div class="v" id="k-lean"></div><div class="l" id="k-leanL"></div></div>
 </div>
 </div>
 
 <section id="chart">
 <div class="sec-h"><span class="n">01</span><h2>Price, trend and the scenario paths</h2></div>
-<p class="sub">Daily candles with the 50, 100 and 200-day averages, volume, MACD and RSI. The dashed lines to the right are the three live scenario paths through November 2027, and the averages are carried forward along the path you pick under "Averages follow". That path is drawn heavier, with its turning points labelled. Hover or tap for readings.</p>
+<p class="sub">Daily candles with the 50, 100 and 200-day averages, MACD and RSI. The dashed lines to the right are the three live scenario paths through November 2027, and the averages are carried forward along the path you pick under "Averages follow". That path is drawn heavier, with its turning points labelled, and MACD and RSI are simulated along it. Hover or tap for readings.</p>
 <div class="panel">
 <div class="tools">
 <button data-r="3M">3M</button><button data-r="6M">6M</button><button data-r="YTD" class="on">YTD</button><button data-r="5Y">5Y weekly</button>
@@ -127,12 +128,12 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 <canvas id="main"></canvas>
 </div>
 <p class="note" id="maNote" style="font-size:13.5px;color:var(--ink)"></p>
-<p class="note">Source: LSEG Workspace, .NDX daily price history. Scenario paths are illustrative roadmaps built from the 2022 leg ratios, not forecasts of exact levels. The averages to the right of the dotted line are computed from the chosen scenario path, so they show where each average would be if price followed that path.</p>
+<p class="note">Source: LSEG Workspace, .NDX daily price history. Scenario paths are illustrative roadmaps built from the 2022 leg ratios, not forecasts of exact levels. The averages to the right of the dotted line are computed from the chosen scenario path, so they show where each average would be if price followed that path. Day-to-day movement along each path is simulated at this year's typical daily swing; the projected MACD and RSI show the shape to expect, not exact readings.</p>
 </section>
 
 <section id="scenarios">
 <div class="sec-h"><span class="n">02</span><h2>Four scenarios</h2></div>
-<p class="sub">Probability-weighted, the index ends the next 12 months roughly 5% below Friday's close, with a further 15–20% drop likely along the way. Click a scenario to see its roadmap.</p>
+<p class="sub">Probability-weighted, the index ends the next 12 months roughly level with Friday's close, but the spread of outcomes is wide and the base case still has a further 15–20% drop along the way. Click a scenario to see its roadmap.</p>
 <div class="grid4" id="scn"></div>
 <div class="grid2" style="margin-top:16px">
 <div class="card"><h3>Key levels</h3><div class="small" style="margin-bottom:8px">Retracements measure the Oct 2022 to Oct 2026 advance.</div>
@@ -167,39 +168,72 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 
 <h3 class="serif" style="font-size:22px;color:var(--maroon);margin:26px 0 10px">Valuations</h3>
 <div class="val">
-<div class="kpi"><div class="v">~16.5×</div><div class="l"><b>Forward P/E.</b> 16.4× on 2027 earnings (Bloomberg); about 16.9× on the next 12 months. Five-year median 24.4×.</div></div>
-<div class="kpi"><div class="v">~23.9×</div><div class="l"><b>Trailing P/E.</b> Long-term average 25.7×. About 38× at the end of 2021 and over 100× in 2000.</div></div>
-<div class="kpi"><div class="v">~0.6</div><div class="l"><b>PEG.</b> Forward P/E over 27% a year earnings growth (3-year). About 0.9 on 5-year growth.</div></div>
-<div class="kpi"><div class="v">~7×</div><div class="l"><b>Price to book.</b> Sources range from 6.5× to 7.8×. High because the largest members hold few physical assets.</div></div>
+<div class="kpi"><div class="v">~17×</div><div class="l"><b>Forward P/E.</b> Providers range from 16.3× (2027 earnings) to 18.7× (next 12 months). Ten-year average about 23×.</div></div>
+<div class="kpi"><div class="v">~23.9×</div><div class="l"><b>Trailing P/E.</b> Providers range from 22× to 26×; ten-year average 23.7× (FactSet). About 38× at the end of 2021 and over 100× in 2000.</div></div>
+<div class="kpi"><div class="v">0.6–1.0</div><div class="l"><b>PEG.</b> About 0.6 on next-year earnings growth of 28%; about 1.0 on the slower 2027 calendar-year growth rate.</div></div>
+<div class="kpi"><div class="v">~7×</div><div class="l"><b>Price to book.</b> 7.5× on 18 Nov (ChartRow), about 7× at Friday's close. High because the largest members hold few physical assets.</div></div>
 </div>
 <div class="grid2">
 <div class="card wide"><h3>How today compares</h3>
 <table><thead><tr><th>Measure</th><th class="num">Now</th><th class="num">End 2021</th><th class="num">2000 peak</th></tr></thead><tbody>
 <tr><td>Trailing P/E</td><td class="num">~24×</td><td class="num">~38×</td><td class="num">100×+</td></tr>
-<tr><td>Forward P/E</td><td class="num">~16.5×</td><td class="num">~30×</td><td class="num">60×+</td></tr>
-<tr><td>S&amp;P 500 forward P/E</td><td class="num">~16.5×</td><td class="num">~21×</td><td class="num">~24×</td></tr>
+<tr><td>Forward P/E</td><td class="num">16.3–18.7×</td><td class="num">~30×</td><td class="num">60×+</td></tr>
+<tr><td>S&amp;P 500 forward P/E</td><td class="num">17.1×</td><td class="num">~21×</td><td class="num">~24×</td></tr>
 <tr><td>Earnings growth, last 12 months</td><td class="num">+49%</td><td class="num">strong</td><td class="num">thin or none</td></tr>
-<tr><td>Largest member's forward P/E</td><td class="num">Nvidia ~12×</td><td class="num">Apple ~30×</td><td class="num">Cisco 130×+</td></tr>
-<tr><td>Earnings yield minus 10-year yield</td><td class="num">+1.1pp</td><td class="num">+1.8pp</td><td class="num">negative</td></tr>
+<tr><td>Nvidia forward P/E</td><td class="num">~9–10×</td><td class="num">Apple ~30×</td><td class="num">Cisco 130×+</td></tr>
+<tr><td>Earnings yield minus 10-year yield</td><td class="num">+0.9pp</td><td class="num">+1.8pp</td><td class="num">negative</td></tr>
 </tbody></table>
-<p class="small" style="margin:10px 0 0">Sources: Bloomberg 2027 P/E as of 13 Nov (18.3× for the Nasdaq 100, 17.8× for the S&amp;P 500), rolled to the 20 Nov close with earnings estimates unchanged; next-12-month forward P/E from <a href="https://dollarliquidity.com/en/valuation/nasdaq-100-forward-pe">DollarLiquidity</a> (17.86× on 19 Nov) and trailing P/E from <a href="https://www.gurufocus.com/economic_indicators/6778/nasdaq-100-pe-ratio">GuruFocus</a> (25.34× on 19 Nov), both rolled one day; S&amp;P 500 cross-check from <a href="https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years">FactSet</a>. Price to book and the end-2021 and 2000 figures are approximate.</p></div>
+<p class="small" style="margin:10px 0 0">Sources: AlphaSense research run on 22 Nov 2026, citing FactSet (S&amp;P 500 at 17.1× on 20 Nov; Nasdaq 100 trailing 22.9× on 19 Nov), XTB (18.7× on 17 Nov), Bloomberg 2027 P/E (18.3× on 13 Nov, about 16.4× at Friday's close) and ChartRow; cross-checked against <a href="https://dollarliquidity.com/en/valuation/nasdaq-100-forward-pe">DollarLiquidity</a> and <a href="https://www.gurufocus.com/economic_indicators/6778/nasdaq-100-pe-ratio">GuruFocus</a>. There is no single consensus series for the Nasdaq 100, and providers differ by two to three turns, so read these as a range. End-2021 and 2000 figures are approximate.</p></div>
 <div class="card"><h3>What the valuations say</h3>
-<p style="font-size:13.5px;margin:6px 0"><span class="dot pos"></span><b>Read: supportive, with a catch.</b> A 20% price fall with rising earnings estimates has taken the forward multiple from about 23× at the end of September to about 16.5×, the lowest in at least five years. The S&amp;P 500 is on a similar multiple, so the Nasdaq 100 no longer trades at a premium despite faster earnings growth. This is nothing like 2000, when the index traded on more than 100× trailing earnings.</p>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot pos"></span><b>Read: supportive, with a catch.</b> A 20% price fall with rising earnings estimates has taken the forward multiple from about 23× at the end of September to about 17×, the lowest since late 2022. Its premium to the S&amp;P 500 is about 5%, against a ten-year average of about 20%. This is nothing like 2000, when the index traded on more than 100× trailing earnings.</p>
 <p style="font-size:13.5px;margin:6px 0"><span class="dot neg"></span><b>The catch is the "E".</b> The multiple is only cheap if AI earnings hold. Semiconductor profits are cyclical, and a low P/E on peak earnings is the classic trap. If hyperscalers cut 2027 capex, forward earnings fall and the same price looks expensive again.</p>
-<p style="font-size:13.5px;margin:6px 0"><span class="dot neu"></span><b>Bonds compete.</b> The index's earnings yield (about 6.0%) is roughly one point above the 10-year Treasury (4.95%). That gap has reopened in the sell-off but is still thinner than the 1.8 points at the end of 2021.</p></div>
+<p style="font-size:13.5px;margin:6px 0"><span class="dot neu"></span><b>Bonds compete.</b> The index's earnings yield (about 5.9%) is roughly one point above the 10-year Treasury (4.95%). That gap has reopened in the sell-off but is still thinner than the 1.8 points at the end of 2021.</p></div>
 </div>
+
+<h3 class="serif" style="font-size:22px;color:var(--maroon);margin:26px 0 10px">Earnings estimates and AI capex</h3>
+<div class="grid2">
+<div class="card wide"><h3>Are estimates being cut?</h3><div class="small" style="margin-bottom:8px">The base case needs them to fall 15–20%. So far they are rising.</div>
+<table><thead><tr><th>Group</th><th>Last 4 weeks</th><th>Detail</th></tr></thead><tbody>
+<tr><td><b>S&amp;P 500</b></td><td><span class="sig pos">Flat to up</span></td><td>2027 growth forecast 16.4% on 20 Nov, up from 16.1% on 6 Nov. 2026 growth +33.7%.</td></tr>
+<tr><td><b>Technology sector</b></td><td><span class="sig pos">Rising</span></td><td>Largest upgrades of any sector since 30 Sep. Consensus growth 62% for 2026 and 41% for 2027.</td></tr>
+<tr><td><b>Semiconductors</b></td><td><span class="sig pos">Rising</span></td><td>2027 estimates rose for about two-thirds of the group after Q3 results. The sector trades on about 15× forward.</td></tr>
+<tr><td><b>Nasdaq 100</b></td><td><span class="sig neu">Unclear</span></td><td>Forward earnings growth reached 42% at the end of October. No reliable index-level figure yet for the past week.</td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0">None of these sources yet reflects the 19–20 Nov sell-off. Revisions usually lag price by several weeks, so this is the first thing to recheck at each update.</p></div>
+<div class="card wide"><h3>Hyperscaler capex guidance</h3><div class="small" style="margin-bottom:8px">No company has formally cut. All figures are company guidance.</div>
+<table><thead><tr><th>Company</th><th>2026</th><th>2027</th></tr></thead><tbody>
+<tr><td><b>Microsoft</b></td><td>About $170bn (was $175bn)</td><td>To accelerate in the second half of its fiscal 2027. Trimmed 2026 on delivery delays; cancelled a $3.2bn order.</td></tr>
+<tr><td><b>Alphabet</b></td><td>$195–205bn, unchanged</td><td>Will "increase significantly".</td></tr>
+<tr><td><b>Amazon</b></td><td>About $220bn</td><td>Will "spend meaningfully more".</td></tr>
+<tr><td><b>Meta</b></td><td>$135–145bn, narrowed up</td><td>To be given in January. Has proposed equity financing.</td></tr>
+<tr><td><b>Oracle</b></td><td colspan="2">$90–95bn in fiscal 2027; raising $20bn of new capital. Peaks in fiscal 2027–28.</td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0"><span class="dot neg"></span>In Bank of America's fund manager survey, 52% expect a hyperscaler capex cut within six months. UBS sees about 30% of 2028 US data-centre additions at risk from state moratoria.</p></div>
+</div>
+<div class="card wide" style="margin-top:16px"><h3>What the strategists are saying (8–22 Nov)</h3>
+<table><thead><tr><th>Firm</th><th>S&amp;P 500 target</th><th>View</th><th>Lean</th></tr></thead><tbody>
+<tr><td><b>Morgan Stanley</b></td><td>8,700 end-2027 (raised)</td><td>"Not the moment to get bearish"; data-centre delays are manageable.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>Evercore ISI</b></td><td>n/a</td><td>A buying opportunity; new highs in the new year.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>UBS Investment Bank</b></td><td>8,900 end-2027</td><td>Long Nasdaq 100 against small caps on valuation; pauses skew 2028 estimates lower.</td><td><span class="sig pos">Bullish</span></td></tr>
+<tr><td><b>Goldman Sachs</b></td><td>8,700 end-2027</td><td>The sell-off has widened from an AI unwind into a broad growth downgrade. Lower 2028 earnings are the main risk.</td><td><span class="sig neu">Cautious</span></td></tr>
+<tr><td><b>Wells Fargo</b></td><td>8,200 end-2027 (lowest)</td><td>Slowing profits and weak sentiment, but much is priced in.</td><td><span class="sig neu">Cautious</span></td></tr>
+<tr><td><b>Bank of America</b></td><td>n/a</td><td>"Euphoria on boom &amp; AI over"; staying tactically risk-off.</td><td><span class="sig neg">Bearish</span></td></tr>
+<tr><td><b>UBS Wealth Management</b></td><td>8,200; bear case 5,500</td><td>Cut US equities to neutral on AI financing and concentration risk.</td><td><span class="sig neg">Bearish</span></td></tr>
+</tbody></table>
+<p class="small" style="margin:10px 0 0">Source for this section: AlphaSense research run on 22 Nov 2026, drawing on broker notes, FactSet and company filings. The S&amp;P 500 closed at 6,910 on 20 Nov. No broker published a Nasdaq 100 target in the period.</p></div>
 
 <div class="grid2" style="margin-top:16px">
 <div class="card"><h3>Constituent newsflow</h3><div class="small">Nasdaq 100 members, latest first</div><ul class="news" id="newsC"></ul></div>
 <div class="card"><h3>US government and policy newsflow</h3><div class="small">Washington, the Fed and the states, latest first</div><ul class="news" id="newsP"></ul></div>
 </div>
-<div class="callout"><h3>Fundamental read</h3><p>Earnings are strong and the index now trades on about 16.5× 2027 earnings, which argues against a 2000-style collapse and means much of the base-case fall would need earnings estimates to be cut, not just multiples to fall. But the three things that set the multiple are all unfavourable or uncertain: <b>the Fed is hiking</b>, <b>state-level policy threatens the data-centre build-out</b>, and <b>2027 capex guidance</b> does not arrive until late January. Fundamentals support the base case: further downside as multiples and sentiment adjust, with a floor from earnings unless capex is cut.</p></div>
+<div class="callout"><h3>Fundamental read</h3><p>Earnings are strong and the index now trades on about 17× forward earnings, which argues against a 2000-style collapse and means much of the base-case fall would need earnings estimates to be cut, not just multiples to fall. But the three things that set the multiple are all unfavourable or uncertain: <b>the Fed is hiking</b>, <b>state-level policy threatens the data-centre build-out</b>, and <b>2027 capex guidance</b> does not arrive until late January. Analysts are still raising estimates and no hyperscaler has cut capex, yet half of fund managers expect a cut within six months. The market is pricing an earnings downgrade that has not happened. If it arrives, the base case plays out; if it does not, the recovery case does.</p></div>
 </section>
 
 <section id="signposts">
 <div class="sec-h"><span class="n">04</span><h2>Signpost scorecard</h2></div>
-<p class="sub">Thirteen signals, scored at each check-in. A net score of +4 or more moves about 10 points of probability from A to B; −4 or less moves about 10 points from A to C. Level triggers override the score.</p>
-<div class="card wide"><table id="score"><thead><tr><th>#</th><th>Signpost</th><th>Reading, 22 Nov</th><th>Bearish if</th><th>Bullish if</th><th>Signal</th></tr></thead><tbody></tbody></table></div>
+<p class="sub">Two scores, kept separate. The trend score says what price is doing now. The fundamental score says whether the outlook is changing. Each signal is weighted 1 to 3 by importance. Together they point to the scenario the evidence leans to.</p>
+<div class="callout" id="leanBox" style="margin:0 0 16px"></div>
+<div class="card wide"><table id="score"><thead><tr><th>Signpost</th><th>Reading</th><th>Bearish if</th><th>Bullish if</th><th class="num">Weight</th><th>Signal</th></tr></thead><tbody></tbody></table></div>
 </section>
 
 <section id="analogues">
@@ -224,11 +258,11 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 <p class="note">Internal research tool. This is analysis, not a recommendation. Historical figures are from LSEG Workspace daily closes; valuation ratios are estimates as noted.</p>
 </section>
 </main>
-<footer><div><span>Red Beacon Asset Management · Singapore</span><span>Data as of <span id="asof2"></span> · Updated at each check-in</span></div></footer>
+<footer><div><span>Red Beacon Asset Management · Singapore</span><span>Market data to <span id="asof2"></span> · Last updated <span class="upd"></span> (Singapore)</span></div></footer>
 
 <script src="data.js"></script>
 <script>
-const $=s=>document.querySelector(s),D=window.NDX_DATA;
+const $=s=>document.querySelector(s),D=window.NDX_DATA,UPDATED='2026-11-22';
 const fmt=n=>Math.round(n).toLocaleString('en-US'),MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const fmtD=d=>`${+d.slice(8)} ${MON[+d.slice(5,7)-1]} ${d.slice(0,4)}`;
 const parse=s=>s.split(';').map(r=>{const a=r.split(','),k=a[0];return{d:`20${k.slice(0,2)}-${k.slice(2,4)}-${k.slice(4,6)}`,o:+a[1],h:+a[2],l:+a[3],c:+a[4],v:+(a[5]||0)}});
@@ -245,8 +279,9 @@ const SCEN={
 A:{name:'A',col:'#E9DCC6',pts:[['2026-12-04',24450,'Leg 1 low'],['2027-01-06',28500,'Relief top'],['2027-03-19',20800,''],['2027-04-30',25000,'Bear rally'],['2027-06-18',19800,'Final low'],['2027-08-20',20300,''],['2027-11-19',23500,'']]},
 B:{name:'B',col:'#21c77a',pts:[['2026-11-27',24200,''],['2026-12-10',23300,'Retest low'],['2027-01-15',27800,'Tests 200-day'],['2027-02-12',26600,'Higher low'],['2027-04-30',29800,'Above 200-day'],['2027-07-30',30800,''],['2027-11-19',31500,'']]},
 C:{name:'C',col:'#f0464b',pts:[['2026-12-04',24300,'Leg 1 low'],['2026-12-18',25800,'Weak bounce'],['2027-01-29',21000,'Breaks March low'],['2027-02-26',23400,'Failed bounce'],['2027-04-16',17000,'Capitulation low'],['2027-06-11',19800,'Relief rally'],['2027-08-20',17800,'Retest'],['2027-11-19',20500,'']]}};
-function pathFor(anch,fut,last){const idx=anch.map(a=>{let i=fut.findIndex(d=>d>=a[0]);return[i<0?fut.length-1:i,a[1],a[2]]}),pts=[[-1,last]].concat(idx),out=[];for(let j=0;j<fut.length;j++){let k=1;while(k<pts.length-1&&pts[k][0]<j)k++;const[i0,v0]=pts[k-1],[i1,v1]=pts[k];out.push(j>=i1?v1:v0+(v1-v0)*(j-i0)/(i1-i0))}return{v:out,marks:idx}}
-function fin(bars,c,off,p,labels,tf,mode){const M=macd(c),R=rsi(c),fut=future(mode,bars[bars.length-1].d),last=bars[bars.length-1].c,paths={};for(const k in SCEN)paths[k]=pathFor(SCEN[k].pts,fut,last);const pma={},cross={};for(const k in SCEN){const ext=c.concat(paths[k].v),full=p.map(n=>sma(ext,n));pma[k]=full.map(a=>a.slice(c.length));cross[k]=[];let pk=c.length-1;for(let j=c.length;j<ext.length;j++){const d0=full[0][j-1]-full[2][j-1],d1=full[0][j]-full[2][j];if(d0>0&&d1<=0)cross[k].push({j:j-c.length,t:'Death cross',v:full[2][j]});if(d0<0&&d1>=0)cross[k].push({j:j-c.length,t:'Golden cross',v:full[2][j]});if(full[2][j]>full[2][pk])pk=j}cross[k].peak=pk>=c.length?{j:pk-c.length,v:full[2][pk]}:null}return{bars,tf,labels,mode,fut,paths,pma,cross,ma:p.map(n=>sma(c,n).slice(off)),m:M.m.slice(off),sg:M.sg.slice(off),h:M.h.slice(off),rsi:R.slice(off),prev:off?c[off-1]:null}}
+function rng(seed){return()=>{seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pathFor(anch,fut,last,seed,sig){const R=rng(seed),idx=anch.map(a=>{let i=fut.findIndex(d=>d>=a[0]);return[i<0?fut.length-1:i,a[1],a[2]]}),pts=[[-1,last]].concat(idx),out=new Array(fut.length);for(let k=1;k<pts.length;k++){const[i0,v0]=pts[k-1],[i1,v1]=pts[k],n=i1-i0;if(n<=0)continue;const W=[0];for(let q=1;q<=n;q++)W.push(W[q-1]+(R()+R()+R()-1.5)*2*sig);for(let q=1;q<=n;q++)out[i0+q]=Math.exp(Math.log(v0)+(Math.log(v1)-Math.log(v0))*q/n+W[q]-q/n*W[n])}const lastI=pts[pts.length-1];for(let j=0;j<fut.length;j++)if(out[j]==null)out[j]=lastI[1];return{v:out,marks:idx}}
+function fin(bars,c,off,p,labels,tf,mode){const M=macd(c),R=rsi(c),fut=future(mode,bars[bars.length-1].d),last=bars[bars.length-1].c,paths={};for(const k in SCEN)paths[k]=pathFor(SCEN[k].pts,fut,last,k.charCodeAt(0)*7+(mode==='W'?1:0),mode==='W'?.02:.009);const pma={},cross={},pind={};for(const k in SCEN){const ext=c.concat(paths[k].v),full=p.map(n=>sma(ext,n)),M2=macd(ext);pind[k]={m:M2.m.slice(c.length),sg:M2.sg.slice(c.length),h:M2.h.slice(c.length),rsi:rsi(ext).slice(c.length)};pma[k]=full.map(a=>a.slice(c.length));cross[k]=[];let pk=c.length-1;for(let j=c.length;j<ext.length;j++){const d0=full[0][j-1]-full[2][j-1],d1=full[0][j]-full[2][j];if(d0>0&&d1<=0)cross[k].push({j:j-c.length,t:'Death cross',v:full[2][j]});if(d0<0&&d1>=0)cross[k].push({j:j-c.length,t:'Golden cross',v:full[2][j]});if(full[2][j]>full[2][pk])pk=j}cross[k].peak=pk>=c.length?{j:pk-c.length,v:full[2][pk]}:null}return{bars,tf,labels,mode,fut,paths,pma,cross,pind,ma:p.map(n=>sma(c,n).slice(off)),m:M.m.slice(off),sg:M.sg.slice(off),h:M.h.slice(off),rsi:R.slice(off),prev:off?c[off-1]:null}}
 function build(mode){if(mode==='W'){const w=toWeekly(daily),lo=weeklyOld.slice(),last=lo[lo.length-1];if(wkKey(last.d)===wkKey(w[0].d)){const f=w.shift();lo[lo.length-1]={d:f.d,o:last.o,h:Math.max(last.h,f.h),l:Math.min(last.l,f.l),c:f.c,v:f.v}}const bars=lo.concat(w);return fin(bars,bars.map(b=>b.c),0,[10,20,40],['MA 10w','MA 20w','MA 40w'],'1W','W')}
 return fin(daily,prior.concat(daily.map(b=>b.c)),prior.length,[50,100,200],['MA 50','MA 100','MA 200'],'1D','D')}
 const SD=build('D'),SW=build('W');
@@ -261,7 +296,7 @@ const cv=$('#main'),{ctx,W,H}=setup(cv),S=state.range==='5Y'?SW:SD;
 const cnt={'3M':63,'6M':126}[state.range]||S.bars.length,n0=Math.max(0,S.bars.length-cnt);
 const bars=S.bars.slice(n0),N=bars.length,fut=state.proj?S.fut:S.fut.slice(0,4),F=fut.length,T=N+F;
 const padL=6,padR=68,pw=W-padL-padR,bw=pw/T,X=i=>padL+(i+.5)*bw;
-const top=46,axis=22,av=H-top-axis,g=8,hP=av*.58,hV=av*.10,hM=av*.16,hR=av*.16,yP=top,yV=yP+hP,yM=yV+hV,yR=yM+hM;
+const top=46,axis=22,av=H-top-axis,g=8,hP=av*.62,hV=0,hM=av*.19,hR=av*.19,yP=top,yV=yP+hP,yM=yV+hV,yR=yM+hM;
 const line=(x1,y1,x2,y2,col,dash,w=1)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])};
 const text=(t,x,y,col,al='left',font='11px Inter,sans-serif')=>{ctx.font=font;ctx.fillStyle=col;ctx.textAlign=al;ctx.fillText(t,x,y);ctx.textAlign='left'};
 const drawTag=(y,t,bg,fg='#111')=>{ctx.fillStyle=bg;ctx.fillRect(W-padR+2,y-8,padR-4,16);text(t,W-padR+6,y+4,fg)},tags=[],tag=(y,t,bg,fg='#111')=>tags.push({y,t,bg,fg});const fk=state.proj&&state.scen[state.maScen]?state.maScen:null;
@@ -278,6 +313,7 @@ LEVELS.forEach(([v,l])=>{if(v>lo&&v<hi){line(padL,Y(v),W-padR,Y(v),'rgba(196,174
 const cw=Math.max(1,Math.min(bw*.7,14));
 bars.forEach((b,i)=>{const col=b.c>=b.o?C.up:C.dn,x=Math.round(X(i))+.5;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,Y(b.h));ctx.lineTo(x,Y(b.l));ctx.stroke();const y1=Y(Math.max(b.o,b.c)),y2=Y(Math.min(b.o,b.c));ctx.fillRect(x-cw/2,y1,cw,Math.max(1,y2-y1))});
 const poly=(arr,col,Yf,w=1.4)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;let st=false;arr.forEach((v,i)=>{if(v==null)return;const x=X(i),y=Yf(v);st?ctx.lineTo(x,y):(ctx.moveTo(x,y),st=true)});ctx.stroke()};
+const polyP=(arr,col,Yf,w)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;arr.forEach((v,i)=>{const x=X(N+i),y=Yf(v);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()};
 S.ma.forEach((a,k)=>poly(a.slice(n0),C.ma[k],Y));
 if(fk){S.pma[fk].forEach((a,j)=>{ctx.beginPath();ctx.strokeStyle=C.ma[j];ctx.lineWidth=1.3;ctx.globalAlpha=.85;ctx.moveTo(X(N-1),Y(S.ma[j][S.ma[j].length-1]));a.forEach((v,i)=>ctx.lineTo(X(N+i),Y(v)));ctx.stroke();ctx.globalAlpha=1});S.cross[fk].forEach(cr=>{const x=X(N+cr.j),y=Y(cr.v);ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x+5,y);ctx.lineTo(x,y+5);ctx.lineTo(x-5,y);ctx.fill();const rt=x>W-padR-90;text(cr.t,rt?x-8:x+8,y+(cr.t[0]==='D'?17:-9),'#d8d8d8',rt?'right':'left','10.5px Inter,sans-serif')})}
 if(state.proj)for(const k in SCEN){if(!state.scen[k])continue;const P=S.paths[k],col=SCEN[k].col;ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=k===fk?2:1.4;ctx.setLineDash(k===fk?[7,4]:[3,4]);ctx.moveTo(X(N-1),Y(bars[N-1].c));P.v.forEach((v,j)=>ctx.lineTo(X(N+j),Y(v)));ctx.stroke();ctx.setLineDash([]);
@@ -285,13 +321,11 @@ if(state.proj)for(const k in SCEN){if(!state.scen[k])continue;const P=S.paths[k]
  tag(Y(P.v[P.v.length-1]),`${k} ${fmt(P.v[P.v.length-1])}`,col)}
 S.ma.forEach((a,k)=>{const v=fk?S.pma[fk][k][F-1]:a[a.length-1];if(v!=null&&v>lo&&v<hi)tag(Y(v),fmt(v),C.ma[k])});
 const L=bars[N-1],pv=N>1?bars[N-2].c:S.prev;tag(Y(L.c),fmt(L.c),L.c>=pv?C.up:C.dn,'#fff');tags.sort((a,b)=>a.y-b.y);tags.forEach((t,i)=>{if(i&&t.y-tags[i-1].y<17)t.y=tags[i-1].y+17;drawTag(t.y,t.t,t.bg,t.fg)});
-[yV,yM,yR].forEach(y=>line(0,y-g/2,W,y-g/2,'#333'));
-const vmax=Math.max(...bars.map(b=>b.v))||1;
-bars.forEach((b,i)=>{ctx.fillStyle=b.c>=b.o?'rgba(33,199,122,.7)':'rgba(240,70,75,.7)';const h=b.v/vmax*(hV-g-14);ctx.fillRect(X(i)-cw/2,yV+hV-g-h,cw,h)});
-const m=S.m.slice(n0),sg=S.sg.slice(n0),hh=S.h.slice(n0),mx=Math.max(...m.concat(sg,hh).map(Math.abs))*1.1||1,YM=v=>yM+(hM-g)/2-v/mx*(hM-g)/2;
-line(padL,YM(0),W-padR,YM(0),'#3a3a3a');hh.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(i)-cw/2,Math.min(YM(0),YM(v)),cw,Math.abs(YM(v)-YM(0)))});poly(m,C.macd,YM,1.2);poly(sg,C.sig,YM,1.2);
+[yM,yR].forEach(y=>line(0,y-g/2,W,y-g/2,'#333'));
+const m=S.m.slice(n0),sg=S.sg.slice(n0),hh=S.h.slice(n0),mx=Math.max(...m.concat(sg,hh,fk?S.pind[fk].m:[],fk?S.pind[fk].sg:[]).map(Math.abs))*1.1||1,YM=v=>yM+(hM-g)/2-v/mx*(hM-g)/2;
+line(padL,YM(0),W-padR,YM(0),'#3a3a3a');hh.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(i)-cw/2,Math.min(YM(0),YM(v)),cw,Math.abs(YM(v)-YM(0)))});poly(m,C.macd,YM,1.2);poly(sg,C.sig,YM,1.2);if(fk){const q=S.pind[fk],pw2=Math.max(1,bw*.6);ctx.globalAlpha=.5;q.h.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(N+i)-pw2/2,Math.min(YM(0),YM(v)),pw2,Math.abs(YM(v)-YM(0)))});ctx.globalAlpha=.9;polyP(q.m,C.macd,YM,1.1);polyP(q.sg,C.sig,YM,1.1);ctx.globalAlpha=1}
 text(fmt(mx*.8),W-padR+6,YM(mx*.8)+4,C.txt);text(fmt(-mx*.8),W-padR+6,YM(-mx*.8)+4,C.txt);
-const rs=S.rsi.slice(n0),YR=v=>yR+(100-v)/100*(hR-g);[30,70].forEach(v=>{line(padL,YR(v),W-padR,YR(v),'#3a3a3a',[3,3]);text(v+'',W-padR+6,YR(v)+4,C.txt)});poly(rs,C.rsi,YR,1.3);
+const rs=S.rsi.slice(n0),YR=v=>yR+(100-v)/100*(hR-g);[30,70].forEach(v=>{line(padL,YR(v),W-padR,YR(v),'#3a3a3a',[3,3]);text(v+'',W-padR+6,YR(v)+4,C.txt)});poly(rs,C.rsi,YR,1.3);if(fk){ctx.globalAlpha=.9;polyP(S.pind[fk].rsi,C.rsi,YR,1.2);ctx.globalAlpha=1}
 let idx=N-1;const hv=state.hover;if(hv&&hv.x>padL&&hv.x<W-padR){idx=Math.max(0,Math.min(T-1,Math.floor((hv.x-padL)/bw)));line(X(idx),top,X(idx),H-axis,'#8a8a8a',[3,3]);if(hv.y>yP&&hv.y<yP+hP-g){line(padL,hv.y,W-padR,hv.y,'#8a8a8a',[3,3]);drawTag(hv.y,fmt(hi-(hv.y-yP)/(hP-g)*(hi-lo)),'#d0d0d0')}
  const dl=fmtD(dates[idx]);ctx.font='11px Inter,sans-serif';const tw=ctx.measureText(dl).width+12,tx=Math.max(padL,Math.min(W-padR-tw,X(idx)-tw/2));ctx.fillStyle='#d0d0d0';ctx.fillRect(tx,H-axis+2,tw,16);text(dl,tx+6,H-axis+14,'#111')}
 const seq=(parts,x,y)=>{ctx.font='12px Inter,sans-serif';parts.forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,x,y);x+=ctx.measureText(t).width+8})};
@@ -299,9 +333,9 @@ const hb=idx<N?idx:N-1,b=bars[hb],pc=hb>0?bars[hb-1].c:(n0>0?S.bars[n0-1].c:S.pr
 if(idx<N)seq([[`NASDAQ 100 · ${S.tf}`,'#e8e8e8']].concat(narrow?[]:[[fmtD(b.d),'#9a9a9a'],['O','#9a9a9a'],[fmt(b.o),cc],['H','#9a9a9a'],[fmt(b.h),cc],['L','#9a9a9a'],[fmt(b.l),cc]],[['C','#9a9a9a'],[fmt(b.c),cc],[pc?`${ch>=0?'+':'−'}${fmt(Math.abs(ch))} (${ch>=0?'+':'−'}${Math.abs(ch/pc*100).toFixed(2)}%)`:'',cc]]),10,18);
 else seq([[`NASDAQ 100 · scenario paths · ${fmtD(dates[idx])}`,'#e8e8e8']].concat(Object.keys(SCEN).filter(k=>state.scen[k]).map(k=>[`${k} ${fmt(S.paths[k].v[idx-N])}`,SCEN[k].col])),10,18);
 if(idx>=N&&fk)seq(S.labels.map((l,k)=>[`${l}  ${fmt(S.pma[fk][k][idx-N])}`,C.ma[k]]).concat([[`projected on path ${fk}`,'#8a8a8a']]),10,36);else seq(S.labels.map((l,k)=>[`${l}  ${S.ma[k][n0+hb]!=null?fmt(S.ma[k][n0+hb]):'n/a'}`,C.ma[k]]),10,36);
-text(b.v?`Volume  ${fmt(b.v)}M`:'Volume  (weekly volume shown from 2026)',10,yV+10,'#9a9a9a');
-ctx.font='11px Inter,sans-serif';let xx=10;[['MACD 12 26 9','#9a9a9a'],[fmt(hh[hb]),hh[hb]>=0?C.up:C.dn],[fmt(m[hb]),C.macd],[fmt(sg[hb]),C.sig]].forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yM+10);xx+=ctx.measureText(t).width+8});
-xx=10;[['RSI 14','#9a9a9a'],[rs[hb]!=null?rs[hb].toFixed(1):'n/a',C.rsi]].forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yR+10);xx+=ctx.measureText(t).width+8});
+
+const pj=idx>=N&&fk?S.pind[fk]:null,pi=idx-N;ctx.font='11px Inter,sans-serif';let xx=10;[['MACD 12 26 9','#9a9a9a'],[fmt(pj?pj.h[pi]:hh[hb]),(pj?pj.h[pi]:hh[hb])>=0?C.up:C.dn],[fmt(pj?pj.m[pi]:m[hb]),C.macd],[fmt(pj?pj.sg[pi]:sg[hb]),C.sig]].concat(pj?[['simulated','#8a8a8a']]:[]).forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yM+10);xx+=ctx.measureText(t).width+8});
+xx=10;[['RSI 14','#9a9a9a'],[pj?pj.rsi[pi].toFixed(1):(rs[hb]!=null?rs[hb].toFixed(1):'n/a'),C.rsi]].concat(pj?[['simulated','#8a8a8a']]:[]).forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yR+10);xx+=ctx.measureText(t).width+8});
 }
 
 function drawLines(cv,cfg){const{ctx,W,H}=setup(cv),padL=8,padR=cfg.padR||62,top=12,bot=22,n=cfg.n,X=i=>padL+i/(n-1)*(W-padL-padR),Y=v=>top+(cfg.max-v)/(cfg.max-cfg.min)*(H-top-bot);
@@ -333,15 +367,15 @@ hov($('#main'),h=>state.hover=h,drawMain);hov($('#rates'),h=>ratesCfg.hover=h,()
 anCfg.series.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;const paint=()=>{b.classList.toggle('on',!s.off);b.style.background=s.off?'transparent':s.col};paint();b.onclick=()=>{s.off=!s.off;paint();drawLines($('#an'),anCfg)};$('#anChips').appendChild(b)});
 
 const last=daily[daily.length-1],peak=Math.max(...daily.map(b=>b.c)),dd=(last.c/peak-1)*100,m200=SD.ma[2][daily.length-1];
-$('#asof').textContent=$('#asof2').textContent=$('#k-date').textContent=fmtD(last.d);
+document.querySelectorAll('.upd').forEach(e=>e.textContent=fmtD(UPDATED));$('#asof').textContent=$('#asof2').textContent=$('#k-date').textContent=fmtD(last.d);
 $('#k-close').textContent=fmt(last.c);$('#k-dd').textContent=dd.toFixed(1).replace('-','−')+'%';$('#k-dd-txt').textContent=Math.abs(dd).toFixed(1)+'%';
 $('#k-200').textContent=((last.c/m200-1)*100).toFixed(1).replace('-','−')+'%';$('#k-rsi').textContent=SD.rsi[daily.length-1].toFixed(1);
 $('#fan').innerHTML=Array.from({length:16},(_,i)=>{const bx=8+i*4.2,fx=72,fy=30,ex=fx+(fx-bx)*(fy/(100-fy));return`<line x1="${bx}" y1="100" x2="${ex}" y2="0" stroke="#C4AE8B" stroke-width="1" opacity=".55" vector-effect="non-scaling-stroke"/>`}).join('');
 
 const rows=(sel,data,f)=>{$(sel+' tbody').innerHTML=data.map(f).join('')};
 $('#scn').innerHTML=[
-['A','2022-style grind',45,'19,000–21,000','22,000–26,000','Q2 2027','The relief rally fails near the 200-day. A second leg follows, with its own bear-market rally on the way down.',1],
-['B','2018/1998-style recovery',30,'about 22,950','29,000–33,000','Dec 2026','Inflation cools and the Fed stops hiking. The December retest holds and the index reclaims its 50-day.',0],
+['A','2022-style grind',40,'19,000–21,000','22,000–26,000','Q2 2027','The relief rally fails near the 200-day. A second leg follows as 2027 earnings estimates are cut by 15–20%.',1],
+['B','2018/1998-style recovery',35,'about 22,950','29,000–33,000','Dec 2026','Estimates keep rising and capex guidance holds. The December retest holds and the index reclaims its 50-day.',0],
 ['C','1987/1990-style sharper fall',20,'15,000–18,000','18,000–23,000','H1 2027','Yields break higher or capex is cut. There is no real relief rally and the second leg is fast.',0],
 ['D','2000-style collapse',5,'under 10,000','well below today','2028+','AI earnings fall 60–70% and multiples collapse together. Needs a capex bust and a recession.',0]
 ].map(([k,n,p,lo,end,when,txt,base])=>`<div class="card scn" data-k="${k}"><div class="small">Scenario ${k}${base?'<span class="badge">Base case</span>':''}</div><h3>${n}</h3><div class="p">${k==='D'?'&lt;5':p}%</div><div class="barp"><i style="width:${p}%"></i></div><dl><dt>Low</dt><dd>${lo}</dd><dt>Low timing</dt><dd>${when}</dd><dt>NDX, Nov 2027</dt><dd>${end}</dd></dl><p>${txt}</p></div>`).join('');
@@ -356,38 +390,44 @@ function showRoad(k){const R=ROAD[k];$('#roadH').textContent=R[0];$('#roadS').te
  if(SCEN[k]){state.maScen=k;if(!state.scen[k]){state.scen[k]=true;document.querySelector(`.tools button.sc[data-k=${k}]`).classList.add('on')}document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x.dataset.k===k));drawMain();if(window.maNote)maNote()}}
 document.querySelectorAll('.scn').forEach(c=>c.onclick=()=>showRoad(c.dataset.k));showRoad('A');
 const sg={'-1':['neg','Bearish'],'0':['neu','Neutral'],'1':['pos','Bullish']};
-rows('#score',[
-['NDX vs 200-day','11% below','Relief rally fails below it','Close above, held 2 weeks',-1],
-['200-day slope','Still rising','Turns down (by Jan if A)','Keeps rising',0],
-['50-day vs 200-day','50-day above, but rolling over','Death cross','50-day holds above',0],
-['Momentum on the retest','MACD and RSI at 5-year lows; no retest yet','New momentum lows with price','Higher RSI and MACD lows',0],
-['Breadth','71 of 101 members in bear markets','More new lows on rallies','New lows shrink on the retest',-1],
-['US 10-year yield','4.95%, down from 5.30% peak','Above 5.25%','Below 4.75%',0],
-['Fed decision, 9 Dec','Hiking; about 70% odds of +25bp','Hike with hawkish guidance','Skip or pause',-1],
-['Inflation','PPI +6.5% y/y; CPI due 10 Dec','Hotter than expected','Cooling',-1],
-['Hyperscaler capex','Q4 guides up to $270bn, above Q3; 2027 guides due Jan–Feb','Cuts or "digestion" language','Maintained or raised',0],
-['Credit (high-yield proxy)','HYG −1.2% since the peak','Widening sharply','Stable or tightening',0],
-['VIX futures curve','Inverted: 28.5 front vs 26.2 second; spot VIX touched 40','Stays inverted','Back to normal slope',-1],
-['Valuation','Forward P/E about 16.5×, a five-year low (median 24.4×)','Estimates cut','Below average and estimates holding',1],
-['US policy','Data-centre moratoria pledged; chip export rules tightened','Moratoria enacted; broader chip tariffs','Permitting reform; pledges diluted',-1]
-],(r,i)=>`<tr><td>${i+1}</td><td><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="sig ${sg[r[4]][0]}">${sg[r[4]][1]}</span></td></tr>`);
+const SIG=[
+['T','NDX vs 200-day','11% below','Relief rally fails below it','Close above, held 2 weeks',2,-1],
+['T','200-day slope','Still rising','Turns down (by Jan if A)','Keeps rising',2,0],
+['T','50-day vs 200-day','50-day above, but rolling over','Death cross','50-day holds above',1,0],
+['T','Momentum on the retest','MACD and RSI at 5-year lows; no retest yet','New momentum lows with price','Higher RSI and MACD lows',2,0],
+['T','Breadth','71 of 101 members in bear markets','More new lows on rallies','New lows shrink on the retest',1,-1],
+['T','VIX futures curve','Inverted: 28.5 front vs 26.2 second; spot VIX touched 40','Stays inverted','Back to normal slope',1,-1],
+['T','Credit (high-yield proxy)','HYG −1.2% since the peak','Widening sharply','Stable or tightening',2,0],
+['F','Earnings estimate revisions','Still rising for the S&P 500, tech and semis','Estimates cut','Estimates keep rising',3,1],
+['F','Hyperscaler capex guidance','No formal cuts; 2027 guided higher. 52% of fund managers expect a cut','Cuts or "digestion" language','Maintained or raised in Jan–Feb',3,1],
+['F','Valuation','Forward P/E about 17×, lowest since 2022','Estimates cut, so the multiple was false','Below average and estimates holding',2,1],
+['F','Fed decision, 9 Dec','Hiking; about 70% odds of +25bp','Hike with hawkish guidance','Skip or pause',2,-1],
+['F','Inflation','PPI +6.5% y/y; CPI due 10 Dec','Hotter than expected','Cooling',2,-1],
+['F','US 10-year yield','4.95%, down from 5.30% peak','Above 5.25%','Below 4.75%',2,0],
+['F','US policy','Data-centre moratoria pledged in 8 states; chip export rules tightened','Moratoria enacted; broader chip tariffs','Permitting reform; pledges diluted',2,-1]];
+const sc=g=>SIG.filter(r=>r[0]===g).reduce((a,r)=>a+r[5]*r[6],0),mxs=g=>SIG.filter(r=>r[0]===g).reduce((a,r)=>a+r[5],0),tS=sc('T'),fS=sc('F'),sgn=n=>(n>0?'+':n<0?'−':'')+Math.abs(n);
+const LEAN=tS<=-3&&fS<=-3?'C':(tS>=1&&fS>=1)||(fS>=5&&tS>-3)?'B':'A',LN={A:'2022-style grind',B:'Recovery',C:'Sharper fall'};
+const LTXT={A:'The price trend is negative while fundamentals are holding up. That is the usual setup for a relief rally inside a downtrend, which is the Scenario A path. It becomes B if the rally reclaims the 50-day and the trend score turns positive; it becomes C if the fundamental score falls to −3 or lower.',B:'Both the trend and the fundamentals are improving. The evidence points to the recovery path. It reverts to A if the rally fails under the 200-day.',C:'Both the trend and the fundamentals are negative. The evidence points to the sharper-fall path. It reverts to A if fundamentals stabilise.'};
+$('#leanBox').innerHTML=`<h3>Leaning to Scenario ${LEAN}: ${LN[LEAN]}</h3><p><b>Trend score ${sgn(tS)}</b> (range ±${mxs('T')}) · <b>Fundamental score ${sgn(fS)}</b> (range ±${mxs('F')}). ${LTXT[LEAN]}</p>`;
+$('#k-lean').textContent='Scenario '+LEAN;$('#k-leanL').textContent=`Signposts lean to: trend ${sgn(tS)}, fundamentals ${sgn(fS)}`;
+$('#score tbody').innerHTML=['T','F'].map(g=>`<tr><td colspan="6" style="background:#e9e4dc;font-weight:600;color:var(--maroon)">${g==='T'?'Trend: what price is doing now':'Fundamentals: what would change the outlook'} · score ${sgn(sc(g))} of ±${mxs(g)}</td></tr>`+SIG.filter(r=>r[0]===g).map(r=>`<tr><td><b>${r[1]}</b></td><td>${r[2]}</td><td>${r[3]}</td><td>${r[4]}</td><td class="num">${r[5]}</td><td><span class="sig ${sg[r[6]][0]}">${sg[r[6]][1]}</span></td></tr>`).join('')).join('');
 rows('#anT',[['2026 (now)','−19.8%','33','n/a','n/a'],['2021–22','−35.6%','277','−6.5%','Dec 2023'],['2018','−23.0%','80','+43.8%','Apr 2019'],['2007–08','−53.7%','267','−34.3%','Jan 2011'],['2000–02','−82.9%','634','−52.8%','Nov 2015'],['1998','−23.0%','57','+110.2%','Nov 1998'],['1990','−32.9%','62','+38.2%','Feb 1991'],['1987','−39.9%','15','+13.7%','May 1989']],r=>`<tr><td><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td></tr>`);
-rows('#cal',[['Late Nov – early Dec 2026','Leg 1 low (target 24,350–24,600)','Start of the relief rally'],['9 Dec 2026','Fed decision','A hawkish hike raises C risk; a skip helps B'],['10 Dec 2026','November CPI','Cooling or hotter inflation'],['Late Dec 2026 – early Jan 2027','Year-end seasonality; relief-rally top window','Test of the 200-day'],['Late Jan – Feb 2027','Hyperscaler Q4 results and 2027 capex guidance','Main trigger for leg 2, or for B'],['Jan 2027 onwards','New governors take office in Texas, Georgia and Ohio','Whether moratoria pledges become policy'],['Late Feb 2027','Nvidia Q4 results','AI demand confirmation'],['Mar – Apr 2027','First leg-2 low window','About 20,800'],['May 2027','Q1 earnings; bear-market rally window','About 25,000'],['May – Jul 2027','Final low window','19,400–20,100']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
-rows('#logT',[['22 Nov 2026','25,029','−5','45 / 30 / 20 / 5','Leg 1, about 90% complete','Baseline. History verified against LSEG daily closes. Fundamentals added: valuation supportive, rates and policy negative. Next: leg 1 low near 24,350–24,600, then the Fed on 9 Dec and CPI on 10 Dec.']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`);
+rows('#cal',[['Late Nov – early Dec 2026','Leg 1 low (target 24,350–24,600)','Start of the relief rally'],['1–2 Dec 2026','House committee interviews on Nvidia (requested)','Headline risk for the largest index member'],['9 Dec 2026','Fed decision','A hawkish hike raises C risk; a skip helps B'],['10 Dec 2026','November CPI','Cooling or hotter inflation'],['Late Dec 2026 – early Jan 2027','Year-end seasonality; relief-rally top window','Test of the 200-day'],['Late Jan – Feb 2027','Hyperscaler Q4 results and 2027 capex guidance','Main trigger for leg 2, or for B'],['Jan 2027 onwards','New governors take office in Texas, Georgia and Ohio','Whether moratoria pledges become policy'],['Late Feb 2027','Nvidia Q4 results','AI demand confirmation'],['Mar – Apr 2027','First leg-2 low window','About 20,800'],['May 2027','Q1 earnings; bear-market rally window','About 25,000'],['May – Jul 2027','Final low window','19,400–20,100']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td>${r[1]}</td><td>${r[2]}</td></tr>`);
+rows('#logT',[['22 Nov 2026 (update 2)','25,029','Trend −4, fundamentals +2','40 / 35 / 20 / 5','Leg 1, about 90% complete; leaning A','AlphaSense and Workspace review. Earnings estimates are still rising and no hyperscaler has cut capex, so the whole de-rating has come from price. Scenario A needs estimate cuts of 15–20% that have not started: moved 5 points from A to B. Scorecard split into trend and fundamental scores. No new price data (weekend).'],['22 Nov 2026','25,029','−5 (old method)','45 / 30 / 20 / 5','Leg 1, about 90% complete','Baseline. History verified against LSEG daily closes. Fundamentals added: valuation supportive, rates and policy negative. Next: leg 1 low near 24,350–24,600, then the Fed on 9 Dec and CPI on 10 Dec.']],r=>`<tr><td style="white-space:nowrap"><b>${r[0]}</b></td><td class="num">${r[1]}</td><td class="num">${r[2]}</td><td class="num">${r[3]}</td><td>${r[4]}</td><td>${r[5]}</td></tr>`);
 const news=(sel,items)=>{$(sel).innerHTML=items.map(([s,d,t,u,src])=>`<li><span class="dot ${s}"></span>${t}<span class="d">${d} · <a href="${u}">${src}</a></span></li>`).join('')};
 news('#newsC',[
-['neg','20 Nov','Chip stocks fell 10.7% in a day and Nvidia about 12%, after Reuters reported the SEC is examining Nvidia\'s accounting. The index had its worst week since March 2020 (−10.4%).','https://aiweekly.co/alerts/nasdaq-100-drops-56-friday-capping-worst-week-since-2020','AI Weekly'],
+['neg','20 Nov','Chip stocks fell 10.7% in a day. Nvidia fell 14% to $125.53, about 48% below its October record, after Reuters reported the SEC is examining its accounting. The inquiry is civil and at an early stage.','https://aiweekly.co/alerts/nasdaq-100-drops-56-friday-capping-worst-week-since-2020','AI Weekly'],
 ['neg','20 Nov','71 of the 101 index members are now in their own bear markets, including all 20 semiconductor and memory names.','https://finance.yahoo.com/markets/live/stock-market-today-friday-november-19-dow-sp-500-nasdaq-anthropic-nvidia-141644188.html','Yahoo Finance'],
 ['pos','17 Nov','Nvidia reported revenue of $115.8bn, up 103% on the year, and guided next quarter to $130bn with no China data-centre sales assumed.','https://www.ibtimes.com/nvidia-record-revenue-130-billion-outlook-china-3809889','IBTimes'],
-['neg','12–17 Nov','Jensen Huang resigned as Nvidia CEO; the board says it will not reinstate him. The stock trades on about 12× forward earnings, its lowest since 2012.','https://www.wealthprofessional.ca/investments/equity-markets/wall-street-absorbs-the-hit-as-nvidia-touches-a-52-week-low/394013','Wealth Professional'],
+['neg','12–17 Nov','Jensen Huang resigned as Nvidia CEO; the board says it will not reinstate him. House committee interviews are requested for 1–2 Dec.','https://www.wealthprofessional.ca/investments/equity-markets/wall-street-absorbs-the-hit-as-nvidia-touches-a-52-week-low/394013','Wealth Professional'],
 ['neg','4–5 Nov','Qualcomm guided below expectations and had its biggest fall since 2020. Micron paused a $4.5bn plant; SanDisk fell 22% and Micron 17% in the week.','https://www.xtb.com/en/market-analysis/nasdaq-sell-off-technology-stocks-suffer-heavy-losses','XTB'],
 ['neg','30 Oct – 2 Nov','Intel fell 29% on results. Oracle fell 9% after announcing a $20bn debt and stock sale to fund AI capacity.','https://247wallst.com/investing/2026/11/03/the-nasdaq-100-is-now-officially-in-a-correction/','24/7 Wall St'],
 ['pos','28 Oct','Amazon, Alphabet, Microsoft and Meta guided fourth-quarter capex to as much as $270bn, above the third quarter. Alphabet kept its 2026 range of $195–205bn.','https://fourweekmba.com/ai-big-tech-and-spacex-guide-q4-capex-up-to-270b-above-q3/','FourWeekMBA'],
-['neu','28 Oct','Microsoft trimmed calendar-2026 capex to about $170bn, citing delays in third-party capacity, not weaker demand.','https://fourweekmba.com/ai-big-tech-and-spacex-guide-q4-capex-up-to-270b-above-q3/','FourWeekMBA']]);
+['neg','Nov','Microsoft trimmed 2026 capex to about $170bn on delivery delays, did not renew an Oracle AI capacity rental and cancelled a $3.2bn order with Nscale.','#fundamentals','AlphaSense research, 22 Nov']]);
 news('#newsP',[
 ['neg','17 Nov','The Commerce Department tightened export rules on advanced AI chips, closing loopholes used to reach China through third countries.','https://www.csmonitor.com/USA/Politics/2026/1118/nvidia-chips-export-bessent-lutnick','CS Monitor'],
-['neg','6 Nov','About 40% of planned US data-centre capacity is in states whose incoming governors campaigned to pause construction, including Texas, Georgia and Ohio.','https://www.insurancejournal.com/news/midwest/2026/11/06/891870.htm','Bloomberg via Insurance Journal'],
-['pos','4–6 Nov','The pledges are not yet law: governors\' powers depend on state legislatures. A new Congress could also pass bipartisan permitting reform for power and transmission.','https://www.techtarget.com/news/data-center-boom-could-hit-a-political-wall-after-midterms/874019/','TechTarget'],
+['neg','6 Nov','About 40% of planned US data-centre capacity is in states whose incoming governors campaigned to pause construction. Governors in eight states have pledged pauses, and all 32 local ballot measures favoured limits.','https://www.insurancejournal.com/news/midwest/2026/11/06/891870.htm','Bloomberg via Insurance Journal'],
+['pos','4–6 Nov','The pledges are not yet law: governors\' powers depend on state legislatures. Bernstein expects states to "go for the wallet, not the off switch".','https://www.techtarget.com/news/data-center-boom-could-hit-a-political-wall-after-midterms/874019/','TechTarget'],
 ['neg','28 Oct','The Fed held at 3.75–4.00% but two members voted to hike. Chair Warsh says inflation "is too high and has been too long". A December hike is largely priced.','https://admiralmarkets.com/analytics/traders-blog/warsh-press-conference-october-2026','Admiral Markets'],
 ['neg','Nov','The 10-year Treasury spent its longest stretch above 5% since 2007 before easing to 4.95%. Treasury left long-bond auction sizes unchanged.','https://247wallst.com/investing/2026/11/18/two-more-days-above-5-and-treasury-yields-tie-2007s-run/','24/7 Wall St'],
 ['neu','Ongoing','A 25% tariff on certain advanced chips has applied since January. The White House has said broader semiconductor tariffs may follow.','https://www.whitehouse.gov/fact-sheets/2026/01/fact-sheet-president-donald-j.-trump-takes-action-on-certain-advanced-computing-chips-to-protect-americas-economic-and-national-security/','White House'],
