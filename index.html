@@ -43,6 +43,7 @@ section{padding-top:34px;scroll-margin-top:60px}
 .tools button.sc[data-k=A].on{border-color:#E9DCC6;color:#E9DCC6}
 .tools button.sc[data-k=B].on{border-color:#21c77a;color:#21c77a}
 .tools button.sc[data-k=C].on{border-color:#f0464b;color:#f0464b}
+.tools button.mf{padding:4px 8px}
 .tools .lab{color:#8a8a8a;margin:0 4px 0 8px}
 canvas{display:block;width:100%}
 #main{height:680px;cursor:crosshair;touch-action:pan-y}
@@ -113,18 +114,20 @@ footer div{max-width:1320px;margin:0 auto;padding:18px 28px;display:flex;gap:20p
 
 <section id="chart">
 <div class="sec-h"><span class="n">01</span><h2>Price, trend and the scenario paths</h2></div>
-<p class="sub">Daily candles with the 50, 100 and 200-day averages, volume, MACD and RSI. The dashed lines to the right are the three live scenario paths through November 2027. Hover or tap for readings.</p>
+<p class="sub">Daily candles with the 50, 100 and 200-day averages, volume, MACD and RSI. The dashed lines to the right are the three live scenario paths through November 2027, and the averages are carried forward along the path you pick under "Averages follow". Hover or tap for readings.</p>
 <div class="panel">
 <div class="tools">
 <button data-r="3M">3M</button><button data-r="6M">6M</button><button data-r="YTD" class="on">YTD</button><button data-r="5Y">5Y weekly</button>
 <span class="lab">Scenarios</span>
 <button class="sc on" data-k="A">A · 2022-style grind</button><button class="sc on" data-k="B">B · Recovery</button><button class="sc on" data-k="C">C · Sharper fall</button>
+<span class="lab">Averages follow</span><button class="mf on" data-k="A">A</button><button class="mf" data-k="B">B</button><button class="mf" data-k="C">C</button>
 <span class="sp"></span>
 <button id="projBtn" class="on">Projection</button>
 </div>
 <canvas id="main"></canvas>
 </div>
-<p class="note">Source: LSEG Workspace, .NDX daily price history. Scenario paths are illustrative roadmaps built from the 2022 leg ratios, not forecasts of exact levels.</p>
+<p class="note" id="maNote" style="font-size:13.5px;color:var(--ink)"></p>
+<p class="note">Source: LSEG Workspace, .NDX daily price history. Scenario paths are illustrative roadmaps built from the 2022 leg ratios, not forecasts of exact levels. The averages to the right of the dotted line are computed from the chosen scenario path, so they show where each average would be if price followed that path.</p>
 </section>
 
 <section id="scenarios">
@@ -242,13 +245,13 @@ A:{name:'A',col:'#E9DCC6',pts:[['2026-12-04',24450,'Leg 1 low'],['2027-01-06',28
 B:{name:'B',col:'#21c77a',pts:[['2026-11-27',24200,''],['2026-12-10',23300,''],['2027-01-15',27800,''],['2027-02-12',26600,''],['2027-04-30',29800,''],['2027-07-30',30800,''],['2027-11-19',31500,'']]},
 C:{name:'C',col:'#f0464b',pts:[['2026-12-04',24300,''],['2026-12-18',25800,''],['2027-01-29',21000,''],['2027-02-26',23400,''],['2027-04-16',17000,''],['2027-06-11',19800,''],['2027-08-20',17800,''],['2027-11-19',20500,'']]}};
 function pathFor(anch,fut,last){const idx=anch.map(a=>{let i=fut.findIndex(d=>d>=a[0]);return[i<0?fut.length-1:i,a[1],a[2]]}),pts=[[-1,last]].concat(idx),out=[];for(let j=0;j<fut.length;j++){let k=1;while(k<pts.length-1&&pts[k][0]<j)k++;const[i0,v0]=pts[k-1],[i1,v1]=pts[k];out.push(j>=i1?v1:v0+(v1-v0)*(j-i0)/(i1-i0))}return{v:out,marks:idx}}
-function fin(bars,c,off,p,labels,tf,mode){const M=macd(c),R=rsi(c),fut=future(mode,bars[bars.length-1].d),last=bars[bars.length-1].c,paths={};for(const k in SCEN)paths[k]=pathFor(SCEN[k].pts,fut,last);return{bars,tf,labels,mode,fut,paths,ma:p.map(n=>sma(c,n).slice(off)),m:M.m.slice(off),sg:M.sg.slice(off),h:M.h.slice(off),rsi:R.slice(off),prev:off?c[off-1]:null}}
+function fin(bars,c,off,p,labels,tf,mode){const M=macd(c),R=rsi(c),fut=future(mode,bars[bars.length-1].d),last=bars[bars.length-1].c,paths={};for(const k in SCEN)paths[k]=pathFor(SCEN[k].pts,fut,last);const pma={},cross={};for(const k in SCEN){const ext=c.concat(paths[k].v),full=p.map(n=>sma(ext,n));pma[k]=full.map(a=>a.slice(c.length));cross[k]=[];let pk=c.length-1;for(let j=c.length;j<ext.length;j++){const d0=full[0][j-1]-full[2][j-1],d1=full[0][j]-full[2][j];if(d0>0&&d1<=0)cross[k].push({j:j-c.length,t:'Death cross',v:full[2][j]});if(d0<0&&d1>=0)cross[k].push({j:j-c.length,t:'Golden cross',v:full[2][j]});if(full[2][j]>full[2][pk])pk=j}cross[k].peak=pk>=c.length?{j:pk-c.length,v:full[2][pk]}:null}return{bars,tf,labels,mode,fut,paths,pma,cross,ma:p.map(n=>sma(c,n).slice(off)),m:M.m.slice(off),sg:M.sg.slice(off),h:M.h.slice(off),rsi:R.slice(off),prev:off?c[off-1]:null}}
 function build(mode){if(mode==='W'){const w=toWeekly(daily),lo=weeklyOld.slice(),last=lo[lo.length-1];if(wkKey(last.d)===wkKey(w[0].d)){const f=w.shift();lo[lo.length-1]={d:f.d,o:last.o,h:Math.max(last.h,f.h),l:Math.min(last.l,f.l),c:f.c,v:f.v}}const bars=lo.concat(w);return fin(bars,bars.map(b=>b.c),0,[10,20,40],['MA 10w','MA 20w','MA 40w'],'1W','W')}
 return fin(daily,prior.concat(daily.map(b=>b.c)),prior.length,[50,100,200],['MA 50','MA 100','MA 200'],'1D','D')}
 const SD=build('D'),SW=build('W');
 const C={bg:'#161616',grid:'#242424',txt:'#a9a9a9',up:'#21c77a',dn:'#f0464b',ma:['#ff7a1a','#19a79a','#c5c2ea'],macd:'#e8e8e8',sig:'#e0b020',rsi:'#d8336f',tan:'#C4AE8B'};
 const LEVELS=[[28750,'61.8% of leg 1'],[22953,'Mar-26 low'],[20900,'50% retracement'],[18400,'61.8% retracement']];
-const state={range:'YTD',proj:true,scen:{A:true,B:true,C:true},hover:null};
+const state={range:'YTD',proj:true,scen:{A:true,B:true,C:true},maScen:'A',hover:null};
 
 function setup(cv){const ctx=cv.getContext('2d'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);ctx.font='11px Inter,sans-serif';return{ctx,W,H}}
 
@@ -260,10 +263,10 @@ const padL=6,padR=68,pw=W-padL-padR,bw=pw/T,X=i=>padL+(i+.5)*bw;
 const top=46,axis=22,av=H-top-axis,g=8,hP=av*.58,hV=av*.10,hM=av*.16,hR=av*.16,yP=top,yV=yP+hP,yM=yV+hV,yR=yM+hM;
 const line=(x1,y1,x2,y2,col,dash,w=1)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;ctx.setLineDash(dash||[]);ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([])};
 const text=(t,x,y,col,al='left',font='11px Inter,sans-serif')=>{ctx.font=font;ctx.fillStyle=col;ctx.textAlign=al;ctx.fillText(t,x,y);ctx.textAlign='left'};
-const tag=(y,t,bg,fg='#111')=>{ctx.fillStyle=bg;ctx.fillRect(W-padR+2,y-8,padR-4,16);text(t,W-padR+6,y+4,fg)};
+const drawTag=(y,t,bg,fg='#111')=>{ctx.fillStyle=bg;ctx.fillRect(W-padR+2,y-8,padR-4,16);text(t,W-padR+6,y+4,fg)},tags=[],tag=(y,t,bg,fg='#111')=>tags.push({y,t,bg,fg});const fk=state.proj&&state.scen[state.maScen]?state.maScen:null;
 let lo=Infinity,hi=-Infinity;bars.forEach(b=>{lo=Math.min(lo,b.l);hi=Math.max(hi,b.h)});
 S.ma.forEach(a=>a.slice(n0).forEach(v=>{if(v!=null){lo=Math.min(lo,v);hi=Math.max(hi,v)}}));
-if(state.proj)for(const k in SCEN)if(state.scen[k])S.paths[k].v.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v)});
+if(state.proj)for(const k in SCEN)if(state.scen[k])S.paths[k].v.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v)});if(fk)S.pma[fk].forEach(a=>a.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v)}));
 const pd=(hi-lo)*.06;lo-=pd;hi+=pd;const Y=v=>yP+(hi-v)/(hi-lo)*(hP-g);
 if(F>4){ctx.fillStyle='rgba(233,220,198,.04)';ctx.fillRect(X(N)-bw/2,top,W-padR-(X(N)-bw/2),H-top-axis);line(X(N)-bw/2,top,X(N)-bw/2,H-axis,'#555',[3,3]);text('SCENARIO PROJECTION',X(N)+6,yP+12,'#8f866f','left','10px Inter,sans-serif')}
 const stp=[250,500,1000,2000,2500,5000].find(s=>(hi-lo)/s<=8)||5000;
@@ -275,11 +278,12 @@ const cw=Math.max(1,Math.min(bw*.7,14));
 bars.forEach((b,i)=>{const col=b.c>=b.o?C.up:C.dn,x=Math.round(X(i))+.5;ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,Y(b.h));ctx.lineTo(x,Y(b.l));ctx.stroke();const y1=Y(Math.max(b.o,b.c)),y2=Y(Math.min(b.o,b.c));ctx.fillRect(x-cw/2,y1,cw,Math.max(1,y2-y1))});
 const poly=(arr,col,Yf,w=1.4)=>{ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=w;let st=false;arr.forEach((v,i)=>{if(v==null)return;const x=X(i),y=Yf(v);st?ctx.lineTo(x,y):(ctx.moveTo(x,y),st=true)});ctx.stroke()};
 S.ma.forEach((a,k)=>poly(a.slice(n0),C.ma[k],Y));
+if(fk){S.pma[fk].forEach((a,j)=>{ctx.beginPath();ctx.strokeStyle=C.ma[j];ctx.lineWidth=1.3;ctx.globalAlpha=.85;ctx.moveTo(X(N-1),Y(S.ma[j][S.ma[j].length-1]));a.forEach((v,i)=>ctx.lineTo(X(N+i),Y(v)));ctx.stroke();ctx.globalAlpha=1});S.cross[fk].forEach(cr=>{const x=X(N+cr.j),y=Y(cr.v);ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x+5,y);ctx.lineTo(x,y+5);ctx.lineTo(x-5,y);ctx.fill();const rt=x>W-padR-90;text(cr.t,rt?x-8:x+8,y+(cr.t[0]==='D'?17:-9),'#d8d8d8',rt?'right':'left','10.5px Inter,sans-serif')})}
 if(state.proj)for(const k in SCEN){if(!state.scen[k])continue;const P=S.paths[k],col=SCEN[k].col;ctx.beginPath();ctx.strokeStyle=col;ctx.lineWidth=k==='A'?2:1.4;ctx.setLineDash(k==='A'?[7,4]:[3,4]);ctx.moveTo(X(N-1),Y(bars[N-1].c));P.v.forEach((v,j)=>ctx.lineTo(X(N+j),Y(v)));ctx.stroke();ctx.setLineDash([]);
  if(k==='A')P.marks.forEach(([j,v,l],q)=>{if(!l)return;const x=X(N+j),y=Y(v),upk=q===0?false:v>P.marks[q-1][1];ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,y,3.5,0,7);ctx.fill();text(`${l} ${fmt(v)}`,x,upk?y-9:y+17,col,'center','11px Inter,sans-serif')});
  tag(Y(P.v[P.v.length-1]),`${k} ${fmt(P.v[P.v.length-1])}`,col)}
-S.ma.forEach((a,k)=>{const v=a[a.length-1];if(v!=null&&v>lo&&v<hi)tag(Y(v),fmt(v),C.ma[k])});
-const L=bars[N-1],pv=N>1?bars[N-2].c:S.prev;tag(Y(L.c),fmt(L.c),L.c>=pv?C.up:C.dn,'#fff');
+S.ma.forEach((a,k)=>{const v=fk?S.pma[fk][k][F-1]:a[a.length-1];if(v!=null&&v>lo&&v<hi)tag(Y(v),fmt(v),C.ma[k])});
+const L=bars[N-1],pv=N>1?bars[N-2].c:S.prev;tag(Y(L.c),fmt(L.c),L.c>=pv?C.up:C.dn,'#fff');tags.sort((a,b)=>a.y-b.y);tags.forEach((t,i)=>{if(i&&t.y-tags[i-1].y<17)t.y=tags[i-1].y+17;drawTag(t.y,t.t,t.bg,t.fg)});
 [yV,yM,yR].forEach(y=>line(0,y-g/2,W,y-g/2,'#333'));
 const vmax=Math.max(...bars.map(b=>b.v))||1;
 bars.forEach((b,i)=>{ctx.fillStyle=b.c>=b.o?'rgba(33,199,122,.7)':'rgba(240,70,75,.7)';const h=b.v/vmax*(hV-g-14);ctx.fillRect(X(i)-cw/2,yV+hV-g-h,cw,h)});
@@ -287,13 +291,13 @@ const m=S.m.slice(n0),sg=S.sg.slice(n0),hh=S.h.slice(n0),mx=Math.max(...m.concat
 line(padL,YM(0),W-padR,YM(0),'#3a3a3a');hh.forEach((v,i)=>{ctx.fillStyle=v>=0?C.up:C.dn;ctx.fillRect(X(i)-cw/2,Math.min(YM(0),YM(v)),cw,Math.abs(YM(v)-YM(0)))});poly(m,C.macd,YM,1.2);poly(sg,C.sig,YM,1.2);
 text(fmt(mx*.8),W-padR+6,YM(mx*.8)+4,C.txt);text(fmt(-mx*.8),W-padR+6,YM(-mx*.8)+4,C.txt);
 const rs=S.rsi.slice(n0),YR=v=>yR+(100-v)/100*(hR-g);[30,70].forEach(v=>{line(padL,YR(v),W-padR,YR(v),'#3a3a3a',[3,3]);text(v+'',W-padR+6,YR(v)+4,C.txt)});poly(rs,C.rsi,YR,1.3);
-let idx=N-1;const hv=state.hover;if(hv&&hv.x>padL&&hv.x<W-padR){idx=Math.max(0,Math.min(T-1,Math.floor((hv.x-padL)/bw)));line(X(idx),top,X(idx),H-axis,'#8a8a8a',[3,3]);if(hv.y>yP&&hv.y<yP+hP-g){line(padL,hv.y,W-padR,hv.y,'#8a8a8a',[3,3]);tag(hv.y,fmt(hi-(hv.y-yP)/(hP-g)*(hi-lo)),'#d0d0d0')}
+let idx=N-1;const hv=state.hover;if(hv&&hv.x>padL&&hv.x<W-padR){idx=Math.max(0,Math.min(T-1,Math.floor((hv.x-padL)/bw)));line(X(idx),top,X(idx),H-axis,'#8a8a8a',[3,3]);if(hv.y>yP&&hv.y<yP+hP-g){line(padL,hv.y,W-padR,hv.y,'#8a8a8a',[3,3]);drawTag(hv.y,fmt(hi-(hv.y-yP)/(hP-g)*(hi-lo)),'#d0d0d0')}
  const dl=fmtD(dates[idx]);ctx.font='11px Inter,sans-serif';const tw=ctx.measureText(dl).width+12,tx=Math.max(padL,Math.min(W-padR-tw,X(idx)-tw/2));ctx.fillStyle='#d0d0d0';ctx.fillRect(tx,H-axis+2,tw,16);text(dl,tx+6,H-axis+14,'#111')}
 const seq=(parts,x,y)=>{ctx.font='12px Inter,sans-serif';parts.forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,x,y);x+=ctx.measureText(t).width+8})};
 const hb=idx<N?idx:N-1,b=bars[hb],pc=hb>0?bars[hb-1].c:(n0>0?S.bars[n0-1].c:S.prev),ch=pc?b.c-pc:0,cc=ch>=0?C.up:C.dn,narrow=W<640;
 if(idx<N)seq([[`NASDAQ 100 · ${S.tf}`,'#e8e8e8']].concat(narrow?[]:[[fmtD(b.d),'#9a9a9a'],['O','#9a9a9a'],[fmt(b.o),cc],['H','#9a9a9a'],[fmt(b.h),cc],['L','#9a9a9a'],[fmt(b.l),cc]],[['C','#9a9a9a'],[fmt(b.c),cc],[pc?`${ch>=0?'+':'−'}${fmt(Math.abs(ch))} (${ch>=0?'+':'−'}${Math.abs(ch/pc*100).toFixed(2)}%)`:'',cc]]),10,18);
 else seq([[`NASDAQ 100 · scenario paths · ${fmtD(dates[idx])}`,'#e8e8e8']].concat(Object.keys(SCEN).filter(k=>state.scen[k]).map(k=>[`${k} ${fmt(S.paths[k].v[idx-N])}`,SCEN[k].col])),10,18);
-seq(S.labels.map((l,k)=>[`${l}  ${S.ma[k][n0+hb]!=null?fmt(S.ma[k][n0+hb]):'n/a'}`,C.ma[k]]),10,36);
+if(idx>=N&&fk)seq(S.labels.map((l,k)=>[`${l}  ${fmt(S.pma[fk][k][idx-N])}`,C.ma[k]]).concat([[`projected on path ${fk}`,'#8a8a8a']]),10,36);else seq(S.labels.map((l,k)=>[`${l}  ${S.ma[k][n0+hb]!=null?fmt(S.ma[k][n0+hb]):'n/a'}`,C.ma[k]]),10,36);
 text(b.v?`Volume  ${fmt(b.v)}M`:'Volume  (weekly volume shown from 2026)',10,yV+10,'#9a9a9a');
 ctx.font='11px Inter,sans-serif';let xx=10;[['MACD 12 26 9','#9a9a9a'],[fmt(hh[hb]),hh[hb]>=0?C.up:C.dn],[fmt(m[hb]),C.macd],[fmt(sg[hb]),C.sig]].forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yM+10);xx+=ctx.measureText(t).width+8});
 xx=10;[['RSI 14','#9a9a9a'],[rs[hb]!=null?rs[hb].toFixed(1):'n/a',C.rsi]].forEach(([t,c])=>{ctx.fillStyle=c;ctx.fillText(t,xx,yR+10);xx+=ctx.measureText(t).width+8});
@@ -321,6 +325,7 @@ const redraw=()=>{drawMain();drawLines($('#rates'),ratesCfg);drawLines($('#an'),
 
 document.querySelectorAll('.tools button[data-r]').forEach(b=>b.onclick=()=>{state.range=b.dataset.r;document.querySelectorAll('.tools button[data-r]').forEach(x=>x.classList.toggle('on',x===b));drawMain()});
 document.querySelectorAll('.tools button.sc').forEach(b=>b.onclick=()=>{const k=b.dataset.k;state.scen[k]=!state.scen[k];b.classList.toggle('on',state.scen[k]);drawMain()});
+document.querySelectorAll('.tools button.mf').forEach(b=>b.onclick=()=>{state.maScen=b.dataset.k;document.querySelectorAll('.tools button.mf').forEach(x=>x.classList.toggle('on',x===b));drawMain();maNote()});
 $('#projBtn').onclick=e=>{state.proj=!state.proj;e.target.classList.toggle('on',state.proj);drawMain()};
 const hov=(cv,set,draw)=>{cv.addEventListener('pointermove',e=>{const r=cv.getBoundingClientRect();set({x:e.clientX-r.left,y:e.clientY-r.top});draw()});cv.addEventListener('pointerleave',()=>{set(null);draw()})};
 hov($('#main'),h=>state.hover=h,drawMain);hov($('#rates'),h=>ratesCfg.hover=h,()=>drawLines($('#rates'),ratesCfg));hov($('#an'),h=>anCfg.hover=h,()=>drawLines($('#an'),anCfg));
@@ -380,6 +385,13 @@ news('#newsP',[
 ['neu','Ongoing','Oil has swung on the Iran negotiations. Higher oil feeds inflation and yields; a deal would ease both.','https://www.babypips.com/news/daily-financial-forex-market-recap-2026-11-12','Babypips'],
 ['pos','History','In every midterm year since 1950, the S&P 500 was higher 12 months after election day. A tendency, not a forecast.','#analogues','Red Beacon Market Insights, Sep 2026']]);
 
+function maNote(){const k=state.maScen,S=SD,cr=S.cross[k],f=S.fut,dd=j=>fmtD(f[j]),parts=[];const dc=cr.find(x=>x.t==='Death cross'),gc=cr.find(x=>x.t==='Golden cross');
+if(dc)parts.push(`the 50-day crosses below the 200-day around <b>${dd(dc.j)}</b>`);
+if(cr.peak&&cr.peak.j<f.length-1)parts.push(`the 200-day peaks near <b>${fmt(cr.peak.v)}</b> around ${dd(cr.peak.j)} and then turns down`);else parts.push('the 200-day keeps rising through November 2027');
+if(gc)parts.push(`the 50-day crosses back above the 200-day around <b>${dd(gc.j)}</b> near ${fmt(gc.v)}`);
+const tops={A:[1,3],B:[2,4],C:[1,3]}[k].map(q=>S.paths[k].marks[q]).map(([j,v])=>`${dd(j)}: price ${fmt(v)} against a 50-day of ${fmt(S.pma[k][0][j])} and a 200-day of ${fmt(S.pma[k][2][j])}`);
+$('#maNote').innerHTML=`<b>On path ${k}:</b> ${parts.join('; ')}. At the rally highs: ${tops.join('; ')}.`}
+maNote();
 new ResizeObserver(redraw).observe(document.body);
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
 </script>
